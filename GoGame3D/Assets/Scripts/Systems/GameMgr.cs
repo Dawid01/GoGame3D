@@ -176,6 +176,7 @@ public class GameMgr : Singleton<GameMgr>
         splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
         {
             UIMgr.Instance.DisactiveElement("Result Panel");
+            UIMgr.Instance.DisactiveElement("Confirm");
             UIMgr.Instance.ActiveElementAnimation("Menu Panel");
             hasGameStarted = false;
             gameboardObject.SetActive(false);
