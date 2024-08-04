@@ -146,11 +146,11 @@ public class GameMgr : Singleton<GameMgr>
 
         if (hasGameStarted)
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Vector2Int result = currentGameboard.CalculatePoints();
-                Debug.Log($"White: {result.x} Black: {result.y}");
-            }
+            // if (Input.GetKeyDown(KeyCode.F))
+            // {
+            //     Vector2Int result = currentGameboard.CalculatePoints();
+            //     Debug.Log($"White: {result.x} Black: {result.y}");
+            // }
         }
         else
         {
@@ -166,7 +166,7 @@ public class GameMgr : Singleton<GameMgr>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseMenu.SetActive(true);
+            UIMgr.Instance.ActiveElement("Pause Menu");
         }
     }
 
@@ -175,13 +175,14 @@ public class GameMgr : Singleton<GameMgr>
         splashScreenImage.raycastTarget = true;
         splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
         {
-            UIMgr.Instance.ActiveElement("Menu Panel");
+            UIMgr.Instance.DisactiveElement("Result Panel");
+            UIMgr.Instance.ActiveElementAnimation("Menu Panel");
             hasGameStarted = false;
             gameboardObject.SetActive(false);
             splashScreenImage.DOFade(0f, 0.35f);
             splashScreenImage.raycastTarget = false;
+            InitializeGame(true);
         });
-        
     }
 
     public void UpdatePoints(int whitePoints, int blackPoints)
