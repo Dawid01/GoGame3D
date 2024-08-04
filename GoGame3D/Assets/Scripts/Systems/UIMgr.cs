@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -17,13 +18,51 @@ public class UIMgr : Singleton<UIMgr>
 {
     [SerializeField] private UIElement[] _elements;
     [SerializeField] private BoardSizes boardSize;
-    
+    public Transform hideTarget;
+    public Transform showTarget;
+
     public void ActiveElement(String name)
     {
         for (int i = 0; i < _elements.Length; i++)
         {
             UIElement e = _elements[i];
             e.element.SetActive(e.name.Equals(name));
+            if (e.name.Equals(name))
+            {
+                e.element.transform.position = showTarget.position;
+            }
+        }
+    }
+    public void ActiveElementAnimation(String name)
+    {
+        for (int i = 0; i < _elements.Length; i++)
+        {
+            UIElement e = _elements[i];
+            if (e.name.Equals(name))
+            {
+                e.element.transform.DOKill();
+                e.element.transform.position = hideTarget.position;
+                e.element.SetActive(true);
+                e.element.transform.DOMove(showTarget.position, 0.25f).SetDelay(0.25f);
+
+            }
+            else
+            {
+                if (e.element.transform.position != hideTarget.position)
+                {
+                    e.element.transform.DOKill();
+                    e.element.transform.DOMove(hideTarget.position, 0.25f).OnComplete(() =>
+                    {
+                        e.element.SetActive(false);
+                    });
+                }
+                else
+                {
+                    e.element.transform.position = hideTarget.position;
+                }
+            }
+
+            //e.element.SetActive(e.name.Equals(name));
         }
     }
 
@@ -35,6 +74,7 @@ public class UIMgr : Singleton<UIMgr>
             if (e.name.Equals(name))
             {
                 e.element.SetActive(true);
+                e.element.transform.position = showTarget.position;
                 return;
             }
         }
@@ -48,6 +88,30 @@ public class UIMgr : Singleton<UIMgr>
             if (e.name.Equals(name))
             {
                 e.element.SetActive(false);
+                return;
+            }
+        }
+    }
+    
+    public void DisactiveElementAnimation(String name)
+    {
+        for (int i = 0; i < _elements.Length; i++)
+        {
+            UIElement e = _elements[i];
+            if (e.name.Equals(name))
+            {
+                if (e.element.transform.position != hideTarget.position)
+                {
+                    e.element.transform.DOKill();
+                    e.element.transform.DOMove(hideTarget.position, 0.25f).OnComplete(() =>
+                    {
+                        e.element.SetActive(false);
+                    });
+                }
+                else
+                {
+                    e.element.transform.position = hideTarget.position;
+                }
                 return;
             }
         }
