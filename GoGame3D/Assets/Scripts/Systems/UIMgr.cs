@@ -138,4 +138,9 @@ public class UIMgr : Singleton<UIMgr>
         GameMgr.Instance.StartGame();
         DisactiveElementAnimation("Game Creator");
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
