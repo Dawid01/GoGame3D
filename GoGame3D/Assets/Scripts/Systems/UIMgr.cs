@@ -135,8 +135,7 @@ public class UIMgr : Singleton<UIMgr>
 
     public void OnStartGame()
     {
-        GameMgr.Instance.hasGameStarted = true;
-        DisactiveElement("Game Creator");
-
+        GameMgr.Instance.StartGame();
+        DisactiveElementAnimation("Game Creator");
     }
 }

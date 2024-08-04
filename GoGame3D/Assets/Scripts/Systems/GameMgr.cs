@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -119,6 +121,16 @@ public class GameMgr : Singleton<GameMgr>
         //OnNextTurn?.Invoke();
     }
 
+    public void StartGame()
+    {
+        
+        hasGameStarted = true;
+        float targetX = (currentGameboard.size / 2f) * (_camera.orthographic ?  0.75f : 1.5f);
+        float targetY = _camera.orthographic ?  -3f : -1f;
+        gameboardObject.transform.DOKill();
+        gameboardObject.transform.DOLocalMove(new Vector3(0f, targetY, 0f), 0.25f).SetEase(Ease.InOutSine);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.G))
@@ -127,8 +139,9 @@ public class GameMgr : Singleton<GameMgr>
         }
         _deltaTime += (Time.deltaTime - _deltaTime) * 0.1f;
         if (hasGameStarted) PauseMenuActive();
-        // float targetX = (currentGameboard.size / 2f) * (_camera.orthographic ?  0.75f : 1f);
-        float targetX = (currentGameboard.size / 2f) * 0.75f;
+        float targetX = (currentGameboard.size / 2f) * (_camera.orthographic ?  0.75f : 1.5f);
+        float targetY = _camera.orthographic ?  -3f : -1f;
+        //float targetX = (currentGameboard.size / 2f) * 0.75f;
         
 
         if (hasGameStarted)
@@ -138,33 +151,13 @@ public class GameMgr : Singleton<GameMgr>
                 Vector2Int result = currentGameboard.CalculatePoints();
                 Debug.Log($"White: {result.x} Black: {result.y}");
             }
-
-            if (gameboardObject.transform.position.x != 0f)
-            {
-                gameboardObject.transform.DOKill();
-                if (_camera.orthographic)
-                {
-                    gameboardObject.transform.DOLocalMoveX(0f, 0.25f).SetEase(Ease.Linear);
-                }
-                else
-                {
-                    //gameboardObject.transform.DOLocalMoveZ(0f, 0.25f).SetEase(Ease.Linear);
-                }
-            }
         }
         else
         {
             if (gameboardObject.transform.localPosition.x != targetX)
             {
                 gameboardObject.transform.DOKill();
-                if (_camera.orthographic)
-                {
-                    gameboardObject.transform.localPosition = currentGameboard.transform.localPosition.With(x: targetX);
-                }
-                else
-                {
-                    //gameboardObject.transform.localPosition = currentGameboard.transform.localPosition.With(z: targetX);
-                }
+                gameboardObject.transform.localPosition = currentGameboard.transform.localPosition.With(x: targetX, y: targetY);
             }
         }
     }
