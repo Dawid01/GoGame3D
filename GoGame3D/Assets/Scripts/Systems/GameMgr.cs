@@ -23,6 +23,7 @@ public class GameMgr : Singleton<GameMgr>
     public Gameboard currentGameboard;
     public int whitePoints, blackPoints;
     public CameraController cameraController;
+    [SerializeField] private Camera _camera;
     [SerializeField] private Gameboard[] _gameboards;
     public PoolingSystem slotPoolingSystem;
     public PoolingSystem stonePoolingSystem;
@@ -126,7 +127,10 @@ public class GameMgr : Singleton<GameMgr>
         }
         _deltaTime += (Time.deltaTime - _deltaTime) * 0.1f;
         if (hasGameStarted) PauseMenuActive();
+        // float targetX = (currentGameboard.size / 2f) * (_camera.orthographic ?  0.75f : 1f);
+        float targetX = (currentGameboard.size / 2f) * 0.75f;
         
+
         if (hasGameStarted)
         {
             if (Input.GetKeyDown(KeyCode.F))
@@ -135,18 +139,32 @@ public class GameMgr : Singleton<GameMgr>
                 Debug.Log($"White: {result.x} Black: {result.y}");
             }
 
-            if (gameboardObject.transform.localPosition.x == 3f)
+            if (gameboardObject.transform.position.x != 0f)
             {
                 gameboardObject.transform.DOKill();
-                gameboardObject.transform.DOLocalMoveX(0f, 0.25f);
+                if (_camera.orthographic)
+                {
+                    gameboardObject.transform.DOLocalMoveX(0f, 0.25f).SetEase(Ease.Linear);
+                }
+                else
+                {
+                    //gameboardObject.transform.DOLocalMoveZ(0f, 0.25f).SetEase(Ease.Linear);
+                }
             }
         }
         else
         {
-            if (gameboardObject.transform.localPosition.x == 0f)
+            if (gameboardObject.transform.localPosition.x != targetX)
             {
                 gameboardObject.transform.DOKill();
-                gameboardObject.transform.DOLocalMoveX(3f, 0.25f);
+                if (_camera.orthographic)
+                {
+                    gameboardObject.transform.localPosition = currentGameboard.transform.localPosition.With(x: targetX);
+                }
+                else
+                {
+                    //gameboardObject.transform.localPosition = currentGameboard.transform.localPosition.With(z: targetX);
+                }
             }
         }
     }

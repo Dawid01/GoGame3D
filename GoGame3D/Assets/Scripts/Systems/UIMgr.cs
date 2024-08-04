@@ -20,6 +20,8 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] private BoardSizes boardSize;
     public Transform hideTarget;
     public Transform showTarget;
+    public RectTransform gameboardShowTarget;
+
     public Ease showHideEase;
     public void ActiveElement(String name)
     {
@@ -119,11 +121,16 @@ public class UIMgr : Singleton<UIMgr>
 
     public void OnCreateGame()
     {
-        string shape = boardSize.boardShapesDropdown.options[boardSize.boardShapesDropdown.value].text;
-        string size = $"S{boardSize.boardSizesDropdown.options[boardSize.boardSizesDropdown.value].text.ToUpper()}";
-        GameMgr.Instance.currentBoardSize = (BoardSize)Enum.Parse(typeof(BoardSize), size);
-        GameMgr.Instance.currentGameMode = (GameMode)Enum.Parse(typeof(GameMode), shape.ToUpper());
-        GameMgr.Instance.InitializeGame();
+       
+        DOVirtual.DelayedCall(0.1f, () =>
+        {
+            string shape = boardSize.boardShapesDropdown.options[boardSize.boardShapesDropdown.value].text;
+            string size = $"S{boardSize.boardSizesDropdown.options[boardSize.boardSizesDropdown.value].text.ToUpper()}";
+            GameMgr.Instance.currentBoardSize = (BoardSize)Enum.Parse(typeof(BoardSize), size);
+            GameMgr.Instance.currentGameMode = (GameMode)Enum.Parse(typeof(GameMode), shape.ToUpper());
+            GameMgr.Instance.InitializeGame();
+        });
+    
     }
 
     public void OnStartGame()
