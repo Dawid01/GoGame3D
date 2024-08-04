@@ -39,6 +39,8 @@ public class PlayerController : Singleton<PlayerController>
 
     void Update()
     {
+        if(!GameMgr.Instance.hasGameStarted) return;
+        
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ChangePlayer();

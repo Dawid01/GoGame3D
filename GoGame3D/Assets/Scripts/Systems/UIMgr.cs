@@ -20,7 +20,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] private BoardSizes boardSize;
     public Transform hideTarget;
     public Transform showTarget;
-
+    public Ease showHideEase;
     public void ActiveElement(String name)
     {
         for (int i = 0; i < _elements.Length; i++)
@@ -43,7 +43,7 @@ public class UIMgr : Singleton<UIMgr>
                 e.element.transform.DOKill();
                 e.element.transform.position = hideTarget.position;
                 e.element.SetActive(true);
-                e.element.transform.DOMove(showTarget.position, 0.25f).SetDelay(0.25f);
+                e.element.transform.DOMove(showTarget.position, 0.25f).SetDelay(0.25f).SetEase(showHideEase);
 
             }
             else
@@ -106,7 +106,7 @@ public class UIMgr : Singleton<UIMgr>
                     e.element.transform.DOMove(hideTarget.position, 0.25f).OnComplete(() =>
                     {
                         e.element.SetActive(false);
-                    });
+                    }).SetEase(showHideEase);
                 }
                 else
                 {
@@ -124,5 +124,12 @@ public class UIMgr : Singleton<UIMgr>
         GameMgr.Instance.currentBoardSize = (BoardSize)Enum.Parse(typeof(BoardSize), size);
         GameMgr.Instance.currentGameMode = (GameMode)Enum.Parse(typeof(GameMode), shape.ToUpper());
         GameMgr.Instance.InitializeGame();
+    }
+
+    public void OnStartGame()
+    {
+        GameMgr.Instance.hasGameStarted = true;
+        DisactiveElement("Game Creator");
+
     }
 }

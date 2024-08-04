@@ -30,7 +30,7 @@ public class GameMgr : Singleton<GameMgr>
     public Material blackMaterial;
     public bool enableGUI = true;
     public GameObject pauseMenu;
-    [HideInInspector] public  bool hasGameStarted = false;
+    public  bool hasGameStarted = false;
     [SerializeField] private SpriteRenderer backgroundRenderer;
 
     [SerializeField] private TextMeshProUGUI whitePointsTextUI;
@@ -57,17 +57,37 @@ public class GameMgr : Singleton<GameMgr>
     void Start()
     {
         Application.targetFrameRate = 60;
-        //InitializeGame();
+        InitializeGame(true);
     }
 
-    public void InitializeGame()
+    public void InitializeGame(bool onStart = false)
     {
         singerPlayer = aiModeToggle.isOn;
         splashScreenImage.DOKill();
         splashScreenImage.raycastTarget = true;
-        splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
+        if(!onStart){
+            splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
+            {
+                currentGameboard?.ClearBoard();
+                gameboardObject.SetActive(true);
+                currentGameboard = _gameboards[(int)currentGameMode % _gameboards.Length];
+                for (int i = 0; i < _gameboards.Length; i++)
+                {
+                    _gameboards[i].gameObject.SetActive(false);
+                }
+                currentGameboard.gameObject.SetActive(true);
+                currentGameboard.InitializeGameboard(currentBoardSize);
+                cameraController.InitializeCamera(currentGameMode, currentBoardSize);
+                OnGameInitialize?.Invoke();
+                UpdatePoints(0, 0);
+                FitBackground();
+                //hasGameStarted = true;
+                splashScreenImage.DOFade(0f, 0.35f);
+                splashScreenImage.raycastTarget = false;
+            });
+        }
+        else
         {
-            UIMgr.Instance.DisactiveElement("Game Creator");
             currentGameboard?.ClearBoard();
             gameboardObject.SetActive(true);
             currentGameboard = _gameboards[(int)currentGameMode % _gameboards.Length];
@@ -81,11 +101,11 @@ public class GameMgr : Singleton<GameMgr>
             OnGameInitialize?.Invoke();
             UpdatePoints(0, 0);
             FitBackground();
-            hasGameStarted = true;
+            //hasGameStarted = true;
             splashScreenImage.DOFade(0f, 0.35f);
             splashScreenImage.raycastTarget = false;
-        });
-        
+        }
+
     }
 
     public void NextTurn()
@@ -113,6 +133,20 @@ public class GameMgr : Singleton<GameMgr>
             {
                 Vector2Int result = currentGameboard.CalculatePoints();
                 Debug.Log($"White: {result.x} Black: {result.y}");
+            }
+
+            if (gameboardObject.transform.localPosition.x == 3f)
+            {
+                gameboardObject.transform.DOKill();
+                gameboardObject.transform.DOLocalMoveX(0f, 0.25f);
+            }
+        }
+        else
+        {
+            if (gameboardObject.transform.localPosition.x == 0f)
+            {
+                gameboardObject.transform.DOKill();
+                gameboardObject.transform.DOLocalMoveX(3f, 0.25f);
             }
         }
     }
