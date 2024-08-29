@@ -47,6 +47,7 @@ public class GameMgr : Singleton<GameMgr>
     [SerializeField] private Image splashScreenImage;
     [HideInInspector] public bool singerPlayer;
     [SerializeField] private Toggle aiModeToggle;
+    private bool _isPause = false;
 
     public override void Awake()
     {
@@ -68,6 +69,7 @@ public class GameMgr : Singleton<GameMgr>
         singerPlayer = aiModeToggle.isOn;
         splashScreenImage.DOKill();
         splashScreenImage.raycastTarget = true;
+        _isPause = false;
         if(!onStart){
             splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
             {
@@ -166,7 +168,16 @@ public class GameMgr : Singleton<GameMgr>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIMgr.Instance.ActiveElement("Pause Menu");
+            if (_isPause)
+            {
+                UIMgr.Instance.DisactiveElementAnimation("Pause Menu");
+            }
+            else
+            {
+                UIMgr.Instance.ActiveElementAnimation("Pause Menu");
+            }
+
+            _isPause = !_isPause;
         }
     }
 
@@ -259,6 +270,11 @@ public class GameMgr : Singleton<GameMgr>
             InitializeGame();
         }
         
+    }
+
+    public void ResumeGame()
+    {
+        _isPause = false;
     }
 
 }
