@@ -12,15 +12,25 @@ public class ResultPanel : Singleton<ResultPanel>
     [SerializeField] private TextMeshProUGUI blackPoints;
     [SerializeField] private Transform whiteCrown;
     [SerializeField] private Transform blackCrown;
-
+    [SerializeField] private Transform content;
+    [SerializeField] private CanvasGroup canvasGroup;
     public override void Awake()
     {
         base.Awake();
     }
 
 
+    public void DisablePanel()
+    {
+        canvasGroup.DOFade(0f, 0.25f);
+    }
+
     public void InitializeResult()
     {
+        canvasGroup.alpha = 0f;
+        canvasGroup.DOFade(1f, 0.25f);
+        content.localScale = Vector3.zero;
+        content.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
         UIMgr.Instance.ActiveElement("Result Panel");
         Vector2Int result = GameMgr.Instance.currentGameboard.CalculatePoints();
         whiteCrown.localScale = Vector3.zero;
