@@ -162,6 +162,8 @@ public class PlayerController : Singleton<PlayerController>
         {
             _previewStone.GetChild(0).gameObject.SetActive(false);
         }
+        UIMgr.Instance.SetPlayerBorderColor(stoneColor, true);
+    
         // if(InputMgr.Instance.isMobile)
         //     _previewStone.gameObject.SetActive(false);
     }

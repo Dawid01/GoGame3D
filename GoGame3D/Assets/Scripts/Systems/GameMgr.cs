@@ -190,6 +190,8 @@ public class GameMgr : Singleton<GameMgr>
             UIMgr.Instance.DisactiveElement("Result Panel");
             UIMgr.Instance.DisactiveElement("Confirm");
             UIMgr.Instance.ActiveElementAnimation("Menu Panel");
+            UIMgr.Instance.SetPlayerBorderColor(StoneColor.BLACK, false);
+
             hasGameStarted = false;
             gameboardObject.SetActive(false);
             splashScreenImage.DOFade(0f, 0.35f);

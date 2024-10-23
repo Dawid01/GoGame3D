@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 [Serializable]
 struct UIElement
@@ -21,8 +22,18 @@ public class UIMgr : Singleton<UIMgr>
     public Transform hideTarget;
     public Transform showTarget;
     public RectTransform gameboardShowTarget;
+    [SerializeField] private GameObject mobileUI;
+    public Image playerColorBorder;
 
     public Ease showHideEase;
+
+    public override void Awake()
+    {
+        base.Awake();
+        mobileUI.SetActive(Application.isMobilePlatform);
+
+    }
+    
     public void ActiveElement(String name)
     {
         for (int i = 0; i < _elements.Length; i++)
@@ -137,10 +148,21 @@ public class UIMgr : Singleton<UIMgr>
     {
         GameMgr.Instance.StartGame();
         DisactiveElementAnimation("Game Creator");
+        SetPlayerBorderColor(StoneColor.BLACK, true);
+
     }
 
     public void Quit()
     {
         Application.Quit();
     }
+    
+    public void SetPlayerBorderColor(StoneColor color, bool visible)
+    {
+        playerColorBorder.DOKill();
+        playerColorBorder.DOFade(visible ? 1f : 0f, 0.25f);
+        Color colorValue = color == StoneColor.WHITE ? Color.white : Color.black;
+        playerColorBorder.DOColor(colorValue, 0.25f);
+    }
+    
 }
