@@ -37,7 +37,7 @@ public class ResultPanel : Singleton<ResultPanel>
         blackCrown.localScale = Vector3.zero;
         bool whiteWin = result.x + 6.5f > result.y;
         title.text = (whiteWin ? "White" : "Black") + " Wins!!!";
-        float d = 2f;
+
         DOTween.To(() => 0, x =>
             {
                 whitePoints.text = $"{x} <size=60%>+6.5</size>";

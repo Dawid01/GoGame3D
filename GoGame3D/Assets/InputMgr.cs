@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class InputMgr : Singleton<InputMgr>
 {
+    public bool gui;
+    
     [HideInInspector] public bool isMobile;
 
     public bool InputDown { get; private set; }
@@ -88,6 +90,18 @@ public class InputMgr : Singleton<InputMgr>
             Zoom = 0;
             IsDragging = false;
         }
+    }
+
+    void OnGUI()
+    {
+        if(!gui) return;
+
+        GUILayout.BeginArea(new Rect(Screen.width - 100, Screen.height - 60, 100, 150));
+        //GUILayout.Label("Down: " + InputDown);
+        //GUILayout.Label("Up: " + InputUp);
+        GUILayout.Label("Draging: " + IsDragging);
+        GUILayout.Label("Multi input: " + IsMultiInput);
+        GUILayout.EndArea();
     }
 
 }
