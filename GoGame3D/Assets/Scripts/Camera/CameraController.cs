@@ -90,6 +90,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
+        
         if (GameMgr.Instance.hasGameStarted)
         {
             HandleZoom();
@@ -106,7 +107,15 @@ public class CameraController : MonoBehaviour
     void HandleZoom()
     {
         if(!_cameraSettings.canZoom) return;
-        _zoomFactor -= Input.mouseScrollDelta.y * zoomSensitivity;
+        if (InputMgr.Instance.isMobile)
+        {
+           // _zoomFactor -= InputMgr.Instance.Zoom * zoomSensitivity;
+        }
+        else
+        {
+            _zoomFactor -= Input.mouseScrollDelta.y * zoomSensitivity;
+        }
+
         _zoomFactor = Math.Clamp(_zoomFactor, _minZoomFactor, _maxZoomFactor);
         _mainCamera.orthographicSize = Mathf.Lerp(_mainCamera.orthographicSize, _defaultCameraSize * _zoomFactor, Time.deltaTime * 10f);
     }
@@ -114,34 +123,73 @@ public class CameraController : MonoBehaviour
     {
         if(!_cameraSettings.canMove) return;
 
-        if (Input.GetMouseButtonDown(1))
+        if (!InputMgr.Instance.isMobile)
         {
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out _hit, Mathf.Infinity, _dragLayer))
+            if (Input.GetMouseButtonDown(1))
             {
-                _isDragging = true;
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-                _previousMousePosition = _hit.point;
+                if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit,
+                        Mathf.Infinity, _dragLayer))
+                {
+                    _isDragging = true;
+                    Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                    _previousMousePosition = _hit.point;
+                }
+            }
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                if (_isDragging)
+                {
+                    Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
+                    _isDragging = false;
+                }
+            }
+
+            if (_isDragging && Input.GetMouseButton(1))
+            {
+                if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit,
+                        Mathf.Infinity, _dragLayer))
+                {
+                    Vector3 pos = _previousMousePosition - _hit.point;
+                    Vector3 move = new Vector3(pos.x * dragSensitivity, 0f, pos.z * dragSensitivity);
+                    transform.Translate(move, Space.World);
+                }
+            }
+        }
+        else
+        {
+            if (InputMgr.Instance.IsDragging)
+            {
+                if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit,
+                        Mathf.Infinity, _dragLayer))
+                {
+                    _isDragging = true;
+                    //Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                    _previousMousePosition = _hit.point;
+                }
+            }
+
+            if (InputMgr.Instance.IsDragging)
+            {
+                if (_isDragging)
+                {
+                    //Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
+                    _isDragging = false;
+                }
+            }
+
+            if (_isDragging && InputMgr.Instance.IsDragging)
+            {
+                if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit,
+                        Mathf.Infinity, _dragLayer))
+                {
+                    Vector3 pos = _previousMousePosition - _hit.point;
+                    Vector3 move = new Vector3(pos.x * dragSensitivity, 0f, pos.z * dragSensitivity);
+                    transform.Translate(move, Space.World);
+                }
             }
         }
 
-        if (Input.GetMouseButtonUp(1))
-        {
-            if (_isDragging)
-            {
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
-                _isDragging = false;
-            }
-        }
-
-        if (_isDragging && Input.GetMouseButton(1))
-        {
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out _hit, Mathf.Infinity, _dragLayer))
-            {
-                Vector3 pos = _previousMousePosition - _hit.point;
-                Vector3 move = new Vector3(pos.x * dragSensitivity, 0f, pos.z * dragSensitivity);
-                transform.Translate(move, Space.World);
-            }
-        }
         ConstrainCameraMovement();
        
     }
@@ -150,9 +198,9 @@ public class CameraController : MonoBehaviour
     {
         if(!_cameraSettings.canRotate) return;
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) || InputMgr.Instance.isMobile && InputMgr.Instance.IsDragging)
         {
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out _hit, Mathf.Infinity, _dragLayer))
+            if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit, Mathf.Infinity, _dragLayer))
             {
                 _isDragging = true;
                 Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
@@ -160,7 +208,7 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1) || InputMgr.Instance.isMobile && !InputMgr.Instance.IsDragging)
         {
             if (_isDragging)
             {
@@ -169,9 +217,9 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        if (_isDragging && Input.GetMouseButton(1))
+        if (_isDragging && Input.GetMouseButton(1) || InputMgr.Instance.isMobile && InputMgr.Instance.IsDragging && _isDragging)
         {
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out _hit, Mathf.Infinity, _dragLayer))
+            if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit, Mathf.Infinity, _dragLayer))
             {
                 Vector3 pos = _previousMousePosition - _hit.point;
                 Vector3 move = new Vector3(pos.x * rotateSensitivity, 0f, pos.z * rotateSensitivity);
@@ -185,7 +233,7 @@ public class CameraController : MonoBehaviour
 
         if (IsDoubleClick())
         {
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out _hit, Mathf.Infinity,
+            if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit, Mathf.Infinity,
                     LayerMask.GetMask("Slot")))
             {
                 if (_hit.transform.TryGetComponent(out Slot slot))

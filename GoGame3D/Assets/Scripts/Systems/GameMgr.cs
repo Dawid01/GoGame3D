@@ -60,7 +60,8 @@ public class GameMgr : Singleton<GameMgr>
 
     void Start()
     {
-        Application.targetFrameRate = 60;
+        bool isMobile = Application.isMobilePlatform;
+        Application.targetFrameRate = isMobile ? 30 : 60;
         InitializeGame(true);
     }
 
