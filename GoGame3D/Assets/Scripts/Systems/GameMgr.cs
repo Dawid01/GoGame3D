@@ -71,6 +71,7 @@ public class GameMgr : Singleton<GameMgr>
         splashScreenImage.DOKill();
         splashScreenImage.raycastTarget = true;
         _isPause = false;
+        UIMgr.Instance.SetPlayerBorderColor(StoneColor.BLACK, false);
         if(!onStart){
             splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
             {
@@ -185,12 +186,12 @@ public class GameMgr : Singleton<GameMgr>
     public void GameHasEnded()
     {
         splashScreenImage.raycastTarget = true;
+        UIMgr.Instance.SetPlayerBorderColor(StoneColor.BLACK, false);
         splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
         {
             UIMgr.Instance.DisactiveElement("Result Panel");
             UIMgr.Instance.DisactiveElement("Confirm");
             UIMgr.Instance.ActiveElementAnimation("Menu Panel");
-            UIMgr.Instance.SetPlayerBorderColor(StoneColor.BLACK, false);
 
             hasGameStarted = false;
             gameboardObject.SetActive(false);

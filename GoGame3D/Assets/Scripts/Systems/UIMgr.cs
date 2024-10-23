@@ -40,9 +40,15 @@ public class UIMgr : Singleton<UIMgr>
         {
             UIElement e = _elements[i];
             e.element.SetActive(e.name.Equals(name));
+
             if (e.name.Equals(name))
             {
                 e.element.transform.position = showTarget.position;
+                if (i == 0)
+                {
+                    SetPlayerBorderColor(StoneColor.BLACK, false);
+
+                }
             }
         }
     }
@@ -160,8 +166,8 @@ public class UIMgr : Singleton<UIMgr>
     public void SetPlayerBorderColor(StoneColor color, bool visible)
     {
         playerColorBorder.DOKill();
-        playerColorBorder.DOFade(visible ? 1f : 0f, 0.25f);
         Color colorValue = color == StoneColor.WHITE ? Color.white : Color.black;
+        colorValue = new Color(colorValue.r, colorValue.g, colorValue.b, visible ? 1f : 0f);
         playerColorBorder.DOColor(colorValue, 0.25f);
     }
     
