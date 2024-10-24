@@ -44,7 +44,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         if (!GameMgr.Instance.hasGameStarted) return;
 
-        if (InputMgr.Instance.InputDown && !InputMgr.Instance.isMobile || InputMgr.Instance.InputUp && InputMgr.Instance.isMobile)
+        if (InputMgr.Instance.InputDown && !InputMgr.Instance.isMobile || InputMgr.Instance.InputUp && InputMgr.Instance.isMobile && !InputMgr.Instance.AfterDragging)
         {
             if (!GameMgr.Instance.currentGameboard) return;
             if (GameMgr.Instance.currentGameboard.isSinglePlayer && stoneColor == StoneColor.WHITE)
@@ -99,7 +99,7 @@ public class PlayerController : Singleton<PlayerController>
             }
         }
 
-        if (InputMgr.Instance.IsDragging)
+        if (InputMgr.Instance.IsDragging || InputMgr.Instance.AfterDragging)
         {
             _previewStone.gameObject.SetActive(false);
             return;

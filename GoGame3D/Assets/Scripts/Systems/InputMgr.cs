@@ -10,6 +10,7 @@ public class InputMgr : Singleton<InputMgr>
     public bool InputDown { get; private set; }
     public bool InputUp { get; private set; }
     public bool IsDragging { get; private set; }
+    public bool AfterDragging { get; private set; }
     public bool IsMultiInput { get; private set; }
     public float Zoom { get; private set; }
 
@@ -68,6 +69,10 @@ public class InputMgr : Singleton<InputMgr>
         {
             InputDown = Input.GetTouch(0).phase == TouchPhase.Began;
             InputUp = Input.GetTouch(0).phase == TouchPhase.Ended;
+            if (InputDown)
+            {
+                AfterDragging = false;
+            }
 
             if (Input.GetTouch(0).phase == TouchPhase.Stationary)
             {
@@ -94,9 +99,9 @@ public class InputMgr : Singleton<InputMgr>
             }
             Zoom = (pinchDistance - _lastPinchDistance) / (Screen.width * 0.5f);
             _lastPinchDistance = pinchDistance;
-
-            //IsDragging = Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary;
             IsDragging = true;
+            AfterDragging = true;
+
         }
         else
         {
