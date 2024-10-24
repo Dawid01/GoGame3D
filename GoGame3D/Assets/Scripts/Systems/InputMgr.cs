@@ -15,8 +15,8 @@ public class InputMgr : Singleton<InputMgr>
 
     public static Action OnLongTouch;
     private float _lastTouchTime;
-    private const float LongTouchThreshold = 0.5f; 
-
+    private const float LongTouchThreshold = 0.5f;
+    private float _lastPinchDistance = 0;
     public override void Awake()
     {
         base.Awake();
@@ -28,7 +28,16 @@ public class InputMgr : Singleton<InputMgr>
     {
         get
         {
-            return isMobile ? (Input.touchCount > 0 ? Input.GetTouch(0).position : Vector2.one * -1000f) : Input.mousePosition;
+            if (!IsMultiInput)
+            {
+                return isMobile
+                    ? (Input.touchCount > 0 ? Input.GetTouch(0).position : Vector2.one * -1000f)
+                    : Input.mousePosition;
+            }
+            else
+            {
+                return (Input.GetTouch(0).position + Input.GetTouch(1).position) / 2;
+            }
         }
     }
 
@@ -73,12 +82,19 @@ public class InputMgr : Singleton<InputMgr>
                 _lastTouchTime = 0; 
             }
 
-            Zoom = 0; 
+            Zoom = 0;
+            _lastPinchDistance = -Mathf.Infinity;
         }
         else if (IsMultiInput)
         {
             float pinchDistance = Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position);
-            Zoom = pinchDistance;
+            if(_lastPinchDistance == -Mathf.Infinity)
+            {
+                _lastPinchDistance = pinchDistance;
+            }
+            Zoom = (pinchDistance - _lastPinchDistance) / (Screen.width * 0.5f);
+            _lastPinchDistance = pinchDistance;
+
             //IsDragging = Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary;
             IsDragging = true;
         }
@@ -88,7 +104,15 @@ public class InputMgr : Singleton<InputMgr>
             InputUp = false;
             _lastTouchTime = 0;
             Zoom = 0;
+            _lastPinchDistance = -Mathf.Infinity;
             IsDragging = false;
+        }
+
+        if (!IsMultiInput)
+        {
+            IsDragging = false;
+            Zoom = 0;
+            _lastPinchDistance = -Mathf.Infinity;
         }
     }
 

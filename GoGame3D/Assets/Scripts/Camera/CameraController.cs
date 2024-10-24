@@ -109,7 +109,7 @@ public class CameraController : MonoBehaviour
         if(!_cameraSettings.canZoom) return;
         if (InputMgr.Instance.isMobile)
         {
-           // _zoomFactor -= InputMgr.Instance.Zoom * zoomSensitivity;
+            _zoomFactor -= InputMgr.Instance.Zoom;
         }
         else
         {
