@@ -214,7 +214,9 @@ public static class Helper
         {
             var _gameBoard = GameMgr.Instance.currentGameboard as SphereGameboard;
             freeSlots = _gameBoard.Slots.FindAll(slot =>
-                slot.placedStone != null && slot.placedStone.stoneColor == null);
+                // slot.placedStone != null && slot.placedStone.stoneColor == null);
+                slot.placedStone != null);
+
             return freeSlots;
         }
         

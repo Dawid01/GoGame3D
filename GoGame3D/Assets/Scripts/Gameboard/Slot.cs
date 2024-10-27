@@ -103,7 +103,6 @@ public class Slot : PoolableObject
         if (GameMgr.Instance.currentGameMode == GameMode.SPHERE)
         {
             hoshiMarker.SetActive(false);
-            SpriteRenderer renderer;
 
             for (int i = 0; i < lines.Length; i++)
             {
