@@ -43,6 +43,7 @@ public class PlayerController : Singleton<PlayerController>
     void Update()
     {
         if (!GameMgr.Instance.hasGameStarted) return;
+        if(GameMgr.Instance.isPause) return;
 
         if (InputMgr.Instance.InputDown && !InputMgr.Instance.isMobile || InputMgr.Instance.InputUp && InputMgr.Instance.isMobile && !InputMgr.Instance.AfterDragging)
         {

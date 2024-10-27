@@ -47,7 +47,7 @@ public class GameMgr : Singleton<GameMgr>
     [SerializeField] private Image splashScreenImage;
     [HideInInspector] public bool singerPlayer;
     [SerializeField] private Toggle aiModeToggle;
-    private bool _isPause = false;
+    [HideInInspector] public bool isPause = false;
 
     public override void Awake()
     {
@@ -70,7 +70,7 @@ public class GameMgr : Singleton<GameMgr>
         singerPlayer = aiModeToggle.isOn;
         splashScreenImage.DOKill();
         splashScreenImage.raycastTarget = true;
-        _isPause = false;
+        isPause = false;
         UIMgr.Instance.SetPlayerBorderColor(StoneColor.BLACK, false);
         if(!onStart){
             splashScreenImage.DOFade(1f, 0.35f).OnComplete(() =>
@@ -170,7 +170,7 @@ public class GameMgr : Singleton<GameMgr>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (_isPause)
+            if (isPause)
             {
                 UIMgr.Instance.DisactiveElementAnimation("Pause Menu");
             }
@@ -179,7 +179,7 @@ public class GameMgr : Singleton<GameMgr>
                 UIMgr.Instance.ActiveElementAnimation("Pause Menu");
             }
 
-            _isPause = !_isPause;
+            isPause = !isPause;
         }
     }
 
@@ -242,43 +242,11 @@ public class GameMgr : Singleton<GameMgr>
         GUILayout.BeginArea(new Rect(10, Screen.height - 30, 100, 20));
         GUILayout.Label("FPS: " + Mathf.Ceil(fps));
         GUILayout.EndArea();
-        
-        return;
-        if (!enableGUI) return;
-
-        GUIStyle guiStyle = new GUIStyle(GUI.skin.button);
-        guiStyle.fontSize = 14;
-
-        GUILayout.BeginArea(new Rect(10, 10, 500, 50)); 
-        GUILayout.BeginHorizontal();
-
-        string[] boardSizeOptions = { "9x9", "13x13", "19x19", "5x5", "7x7" };
-        currentBoardSize = (BoardSize)GUILayout.SelectionGrid((int)currentBoardSize, boardSizeOptions, 5, guiStyle);
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
-
-        GUILayout.BeginArea(new Rect(10, 40, 330, 90)); 
-        GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal();
-
-        string[] gameModeOptions = { "NORMAL", "LOOPING", "CUBE", "SPHERE" };
-        currentGameMode = (GameMode)GUILayout.SelectionGrid((int)currentGameMode, gameModeOptions, 4, guiStyle);
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndVertical();
-        GUILayout.EndArea();
-
-        if (GUI.Button(new Rect(10, 80, 120, 40), "Generate")) 
-        {
-            InitializeGame();
-        }
-        
     }
 
     public void ResumeGame()
     {
-        _isPause = false;
+        isPause = false;
     }
 
 }
