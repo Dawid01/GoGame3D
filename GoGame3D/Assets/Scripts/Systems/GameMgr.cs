@@ -127,16 +127,27 @@ public class GameMgr : Singleton<GameMgr>
 
     public void StartGame()
     {
-        
         hasGameStarted = true;
         float targetX = (currentGameboard.size / 2f) * (_camera.orthographic ?  0.75f : 1.5f);
         float targetY = _camera.orthographic ?  -3f : -1f;
         gameboardObject.transform.DOKill();
         gameboardObject.transform.DOLocalMove(new Vector3(0f, targetY, 0f), 0.25f).SetEase(Ease.InOutSine);
+        
         if (InputMgr.Instance.isMobile)
         {
             UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
         }
+
+        UIMgr.Instance.ShowGameplayMobileInput();
+        // DOVirtual.DelayedCall(3f, () =>
+        // {
+        //     Debug.Log("TEST");
+        //     if (InputMgr.Instance.isMobile)
+        //     {
+        //         UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
+        //     }
+        // }, false);
+
     }
 
     void Update()
@@ -183,7 +194,7 @@ public class GameMgr : Singleton<GameMgr>
         if (isPause)
         {
             UIMgr.Instance.DisactiveElementAnimation("Pause Menu");
-            if (InputMgr.Instance.isMobile)
+            if (UIMgr.Instance.isMobile)
             {
                 UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
             }
@@ -191,9 +202,9 @@ public class GameMgr : Singleton<GameMgr>
         else
         {
             UIMgr.Instance.ActiveElementAnimation("Pause Menu");
-            if (InputMgr.Instance.isMobile)
+            if (UIMgr.Instance.isMobile)
             {
-                UIMgr.Instance.DisactiveElement("Mobile Gameplay Input");
+               UIMgr.Instance.DisactiveElement("Mobile Gameplay Input");
             }
         }
 
@@ -264,7 +275,7 @@ public class GameMgr : Singleton<GameMgr>
     public void ResumeGame()
     {
         isPause = false;
-        if (InputMgr.Instance.isMobile)
+        if (UIMgr.Instance.isMobile)
         {
             UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
         }

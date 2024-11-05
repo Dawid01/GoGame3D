@@ -24,13 +24,15 @@ public class UIMgr : Singleton<UIMgr>
     public RectTransform gameboardShowTarget;
     [SerializeField] private GameObject mobileUI;
     public Image playerColorBorder;
-
     public Ease showHideEase;
+    public bool isMobile;
 
     public override void Awake()
     {
         base.Awake();
-        mobileUI.SetActive(Application.isMobilePlatform);
+        //isMobile = Application.isMobilePlatform;
+        isMobile = true;
+        mobileUI.SetActive(isMobile);
 
     }
     
@@ -97,6 +99,12 @@ public class UIMgr : Singleton<UIMgr>
                 return;
             }
         }
+    }
+
+    public void ShowGameplayMobileInput()
+    {
+        _elements[_elements.Length - 1].element.SetActive(true);
+        _elements[_elements.Length - 1].element.transform.position = showTarget.position;
     }
 
     public void DisactiveElement(String name)
