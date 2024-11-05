@@ -5,7 +5,7 @@ public class InputMgr : Singleton<InputMgr>
 {
     public bool gui;
     
-    [HideInInspector] public bool isMobile;
+    public bool isMobile;
 
     public bool InputDown { get; private set; }
     public bool InputUp { get; private set; }

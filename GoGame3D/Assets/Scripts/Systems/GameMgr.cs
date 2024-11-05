@@ -133,6 +133,10 @@ public class GameMgr : Singleton<GameMgr>
         float targetY = _camera.orthographic ?  -3f : -1f;
         gameboardObject.transform.DOKill();
         gameboardObject.transform.DOLocalMove(new Vector3(0f, targetY, 0f), 0.25f).SetEase(Ease.InOutSine);
+        if (InputMgr.Instance.isMobile)
+        {
+            UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
+        }
     }
 
     void Update()
@@ -170,17 +174,30 @@ public class GameMgr : Singleton<GameMgr>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isPause)
-            {
-                UIMgr.Instance.DisactiveElementAnimation("Pause Menu");
-            }
-            else
-            {
-                UIMgr.Instance.ActiveElementAnimation("Pause Menu");
-            }
-
-            isPause = !isPause;
+            PauseGameChange();
         }
+    }
+
+    public void PauseGameChange()
+    {
+        if (isPause)
+        {
+            UIMgr.Instance.DisactiveElementAnimation("Pause Menu");
+            if (InputMgr.Instance.isMobile)
+            {
+                UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
+            }
+        }
+        else
+        {
+            UIMgr.Instance.ActiveElementAnimation("Pause Menu");
+            if (InputMgr.Instance.isMobile)
+            {
+                UIMgr.Instance.DisactiveElement("Mobile Gameplay Input");
+            }
+        }
+
+        isPause = !isPause;
     }
 
     public void GameHasEnded()
@@ -247,6 +264,10 @@ public class GameMgr : Singleton<GameMgr>
     public void ResumeGame()
     {
         isPause = false;
+        if (InputMgr.Instance.isMobile)
+        {
+            UIMgr.Instance.ActiveElementWithoutCloseOthers("Mobile Gameplay Input");
+        }
     }
 
 }
