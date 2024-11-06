@@ -23,6 +23,7 @@ public class UIMgr : Singleton<UIMgr>
     public Transform showTarget;
     public RectTransform gameboardShowTarget;
     [SerializeField] private GameObject mobileUI;
+    public CanvasGroup clearMoveButton;
     public Image playerColorBorder;
     public Ease showHideEase;
     public bool isMobile;
@@ -30,8 +31,8 @@ public class UIMgr : Singleton<UIMgr>
     public override void Awake()
     {
         base.Awake();
-        //isMobile = Application.isMobilePlatform;
-        isMobile = true;
+        isMobile = Application.isMobilePlatform;
+        //isMobile = true;
         mobileUI.SetActive(isMobile);
 
     }
@@ -178,5 +179,20 @@ public class UIMgr : Singleton<UIMgr>
         colorValue = new Color(colorValue.r, colorValue.g, colorValue.b, visible ? 1f : 0f);
         playerColorBorder.DOColor(colorValue, 0.25f);
     }
-    
+
+    public void EnableClearMoveButton(bool active)
+    {
+        clearMoveButton.DOKill();
+        if (active)
+        {
+            clearMoveButton.gameObject.SetActive(true);
+            clearMoveButton.transform.localScale = Vector3.one;
+        }
+
+        clearMoveButton.DOFade(active ? 1f : 0f, 0.25f).OnComplete(() =>
+        {
+            clearMoveButton.gameObject.SetActive(active);
+        });
+    }
+
 }

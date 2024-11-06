@@ -11,6 +11,7 @@ public class PlayerController : Singleton<PlayerController>
     private Gameboard _gameboard;
     [SerializeField] private AudioClip _stonePutClip;
     private Camera _mainCamera;
+    private bool _clearMove = false;
 
     private void Start()
     {
@@ -63,12 +64,19 @@ public class PlayerController : Singleton<PlayerController>
                 return;
             }
 
+            if (InputMgr.Instance.InputDown) _clearMove = false;
+            
             if (Physics.Raycast(_mainCamera.ScreenPointToRay(InputMgr.Instance.InputPosition), out _hit, Mathf.Infinity,
                     LayerMask.GetMask("Slot", "Sphere")))
             {
                 if (_hit.transform.TryGetComponent(out Slot slot))
                 {
-                    if (slot.IsEmpty())
+                    if (UIMgr.Instance.isMobile)
+                    {
+                        UIMgr.Instance.EnableClearMoveButton(true);
+                    }
+
+                    if (slot.IsEmpty() && !_clearMove)
                     {
                         if (_gameboard.CanPutStone(slot, stoneColor))
                         {
@@ -115,7 +123,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             if (_hit.transform.TryGetComponent(out Slot slot))
             {
-                _previewStone.gameObject.SetActive(slot.IsEmpty());
+                _previewStone.gameObject.SetActive(slot.IsEmpty() && !_clearMove);
                 _previewStone.position = slot.slotAnchor.position;
                 _previewStone.rotation = slot.slotAnchor.rotation;
             }
@@ -137,6 +145,11 @@ public class PlayerController : Singleton<PlayerController>
         if (Input.GetMouseButtonDown(2))
         {
             RemoveStone();
+        }
+
+        if (InputMgr.Instance.InputUp && UIMgr.Instance.isMobile)
+        {
+            UIMgr.Instance.EnableClearMoveButton(false);
         }
     }
 
@@ -172,4 +185,16 @@ public class PlayerController : Singleton<PlayerController>
         // if(InputMgr.Instance.isMobile)
         //     _previewStone.gameObject.SetActive(false);
     }
+
+    public void SetClearMove(bool value)
+    {
+        _clearMove = value;
+        _previewStone.gameObject.SetActive(!_clearMove);
+        UIMgr.Instance.clearMoveButton.DOKill();
+        UIMgr.Instance.clearMoveButton.transform.DOScale(value ? 1.2f : 1f, 0.15f);
+        
+    }
+
+
+
 }
