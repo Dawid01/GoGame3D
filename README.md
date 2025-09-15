@@ -17,7 +17,7 @@ The main goal of this project was to extend the traditional rules and mechanics 
   - stone capturing
   - the *ko* rule
   - territory scoring
-- **User interface** with smooth interaction and visualization of gameplay
+- **User interface**
 
 ## Screenshots
 ![Screen1](https://github.com/Dawid01/GoGame3D/blob/main/Screens/screen1.png)
