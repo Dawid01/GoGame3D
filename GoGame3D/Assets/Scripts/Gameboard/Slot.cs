@@ -78,7 +78,7 @@ public class Slot : PoolableObject
         tStone.parent = slotAnchor;
         tStone.localPosition = Vector3.zero;
         tStone.localEulerAngles = Vector3.zero;
-
+        
         if (additionalSlots.Count > 0)
         {
             for (int i = 0; i < additionalSlots.Count; i++)
