@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.47521362, g: 0.50234365, b: 0.5566038, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -2719,6 +2719,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &257348141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3120391140366972139, guid: ce632f3c41cb651429cd0915a915388e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1761340703}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &259265325
 GameObject:
   m_ObjectHideFlags: 0
@@ -9378,6 +9390,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768955749}
   m_CullTransparentMesh: 0
+--- !u!114 &777433903 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3120391140366972139, guid: ce632f3c41cb651429cd0915a915388e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7948621854461074572}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &778142725
 GameObject:
   m_ObjectHideFlags: 0
@@ -10345,7 +10369,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 209}
+  m_AnchoredPosition: {x: 0, y: 203}
   m_SizeDelta: {x: 900, y: 210}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &873952712
@@ -12236,6 +12260,7 @@ GameObject:
   - component: {fileID: 1054637751}
   - component: {fileID: 1054637750}
   - component: {fileID: 1054637749}
+  - component: {fileID: 1054637752}
   m_Layer: 5
   m_Name: LoginPanel
   m_TagString: Untagged
@@ -12313,6 +12338,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1054637746}
   m_CullTransparentMesh: 0
+--- !u!114 &1054637752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054637746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cf30324386bdf0478741892c5fc21c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoginPanel
+  emailField: {fileID: 7948621854461074574}
+  emailError: {fileID: 777433903}
+  passwordField: {fileID: 1761340705}
+  passwordError: {fileID: 257348141}
 --- !u!1 &1055240287
 GameObject:
   m_ObjectHideFlags: 0
@@ -12348,7 +12389,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 275, y: -319}
+  m_AnchoredPosition: {x: 275, y: -327}
   m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1055240289
@@ -13185,6 +13226,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1054637752}
+    - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Login
+      objectReference: {fileID: 0}
+    - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LoginPanel, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2361517742343698562, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}
@@ -19872,6 +19933,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1921286429}
     m_Modifications:
+    - target: {fileID: 1550859907932996180, guid: ce632f3c41cb651429cd0915a915388e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4660778743687561870, guid: ce632f3c41cb651429cd0915a915388e,
         type: 3}
       propertyPath: m_InputType
@@ -20013,6 +20079,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1761340703}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1761340705 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4660778743687561870, guid: ce632f3c41cb651429cd0915a915388e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1761340703}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!1 &1762974306
 GameObject:
   m_ObjectHideFlags: 0
@@ -20694,6 +20772,50 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1823687287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1823687288}
+  - component: {fileID: 1823687289}
+  m_Layer: 0
+  m_Name: NETWOKR_MGR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1823687288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823687287}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1940524204}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1823687289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823687287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0fb670c50f1d54bb37b4f2c35698f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkMgr
 --- !u!1001 &1840120408
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21698,7 +21820,11 @@ PrefabInstance:
       objectReference: {fileID: 566734633}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1791264965135085886, guid: eab129dbb5dc84a4db99fba5da9a898a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1823687288}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3439694618030358308, guid: eab129dbb5dc84a4db99fba5da9a898a,
         type: 3}
@@ -22078,7 +22204,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 10
+  m_Spacing: 15
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -22086,6 +22212,12 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!4 &1940524204 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1791264965135085886, guid: eab129dbb5dc84a4db99fba5da9a898a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1887692937}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1940836507
 GameObject:
   m_ObjectHideFlags: 0
@@ -24826,6 +24958,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7948621854461074572}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7948621854461074574 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4660778743687561870, guid: ce632f3c41cb651429cd0915a915388e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7948621854461074572}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!1 &7949296328668988194
 GameObject:
   m_ObjectHideFlags: 0
