@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 
@@ -15,25 +17,89 @@ public class LoginPanel : MonoBehaviour
         String email = emailField.text;
         String password = passwordField.text;
         bool isError = false;
-        if (email.Length == 0)
+
+        if (string.IsNullOrWhiteSpace(email))
         {
             isError = true;
             emailError.gameObject.SetActive(true);
-            emailError.text = "Email field is Empty!";
+            emailError.text = "Email field is empty!";
         }
-
-        if (!email.Contains("@") && !isError)
+        else if (!email.Contains("@"))
         {
             isError = true;
             emailError.gameObject.SetActive(true);
-            emailError.text = "It's not email!";
+            emailError.text = "Invalid email format!";
+        }
+        else
+        {
+            emailError.gameObject.SetActive(false);
         }
 
-        if (password.Length == 0)
+        if (string.IsNullOrWhiteSpace(password))
         {
             isError = true;
-            passwordField.gameObject.SetActive(true);
-            passwordError.text = "Password field is Empty!";
+            passwordError.gameObject.SetActive(true);
+            passwordError.text = "Password field is empty!";
         }
+        else
+        {
+            passwordError.gameObject.SetActive(false);
+        }
+        if(isError) return;
+
+        _ = LoginTask(email, password);
+    }
+
+    private async Task LoginTask(string email, string password)
+    {
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        await ClientAPI.CallPost<string, LoginRequest>(
+            "/auth/login",
+            loginRequest,
+            OnSuccessfull: (responseText, httpResponse) => {
+                
+                Debug.Log("Login successfu: " + responseText);
+                UIMgr.Instance.ActiveElement("Menu Panel");
+                ClientAPI.PlayerLoged(loginRequest);
+                emailField.text = "";
+                passwordField.text = "";
+
+            },
+            OnFailure: () => {
+                Debug.LogError("Błąd logowania!");
+            }
+        );
+
+    }
+}
+
+    
+[Serializable]
+public class LoginRequest
+{
+    [JsonProperty("email")]
+    public string Email { get; set; }
+    [JsonProperty("password")]
+    public string Password { get; set; }
+
+    public LoginRequest(string email, string password)
+    {
+        Email = email;
+        Password = password;
+    }
+        
+}
+
+public class RegisterRequest
+{
+    public string Email { get; set; }
+    public String Nickname { get; set; }
+    public string Password { get; set; }
+
+    public RegisterRequest(string email, string nickname, string password)
+    {
+        Email = email;
+        Nickname = nickname;
+        Password = password;
     }
 }
