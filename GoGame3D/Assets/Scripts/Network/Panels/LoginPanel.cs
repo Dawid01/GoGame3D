@@ -12,10 +12,17 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] private TMP_InputField passwordField;
     [SerializeField] private TextMeshProUGUI passwordError;
 
+
+    private void OnEnable()
+    {
+        emailError.text = "";
+        passwordError.text = "";
+    }
+
     public void Login()
     {
-        String email = emailField.text;
-        String password = passwordField.text;
+        string email = emailField.text;
+        string password = passwordField.text;
         bool isError = false;
 
         if (string.IsNullOrWhiteSpace(email))
@@ -66,10 +73,16 @@ public class LoginPanel : MonoBehaviour
 
             },
             OnFailure: () => {
-                Debug.LogError("Błąd logowania!");
+                Debug.LogError("Error");
             }
         );
 
+    }
+
+    public void SetEmail(string email)
+    {
+        emailField.text = email;
+        passwordField.text = "";
     }
 }
 
@@ -90,16 +103,3 @@ public class LoginRequest
         
 }
 
-public class RegisterRequest
-{
-    public string Email { get; set; }
-    public String Nickname { get; set; }
-    public string Password { get; set; }
-
-    public RegisterRequest(string email, string nickname, string password)
-    {
-        Email = email;
-        Nickname = nickname;
-        Password = password;
-    }
-}
