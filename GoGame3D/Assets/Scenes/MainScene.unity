@@ -22639,6 +22639,26 @@ PrefabInstance:
       objectReference: {fileID: 568631222}
     - target: {fileID: 1353282890620401824, guid: eab129dbb5dc84a4db99fba5da9a898a,
         type: 3}
+      propertyPath: loginPanelBackground
+      value: 
+      objectReference: {fileID: 1054637750}
+    - target: {fileID: 1353282890620401824, guid: eab129dbb5dc84a4db99fba5da9a898a,
+        type: 3}
+      propertyPath: imageBackgrounds.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353282890620401824, guid: eab129dbb5dc84a4db99fba5da9a898a,
+        type: 3}
+      propertyPath: 'imageBackgrounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1054637750}
+    - target: {fileID: 1353282890620401824, guid: eab129dbb5dc84a4db99fba5da9a898a,
+        type: 3}
+      propertyPath: 'imageBackgrounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1309014113}
+    - target: {fileID: 1353282890620401824, guid: eab129dbb5dc84a4db99fba5da9a898a,
+        type: 3}
       propertyPath: 'backgroundButtons.Array.data[0]'
       value: 
       objectReference: {fileID: 4293759211665241141}

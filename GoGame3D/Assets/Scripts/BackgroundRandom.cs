@@ -11,6 +11,7 @@ public class BackgroundRandom : MonoBehaviour
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private Image[] backgroundButtons;
     [SerializeField] private Image[] backgroundButtons2;
+    [SerializeField] private Image[] imageBackgrounds;
 
     private Color _unselectedColor;
     void Awake()
@@ -31,6 +32,10 @@ public class BackgroundRandom : MonoBehaviour
         }
         
         spriteRenderer.sprite = sprites[backgroundIndex];
+        for (int i = 0; i < imageBackgrounds.Length; i++)
+        {
+            imageBackgrounds[i].sprite = sprites[backgroundIndex];
+        }
     }
 
     public void SetBackground(int index)
