@@ -1,8 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
+
+public enum RegisterStatus{
+    OK,
+    EMAIL_EXIST,
+    NICKNAME_USED
+}
 
 public class RegisterPanel : MonoBehaviour
 {
@@ -69,18 +76,18 @@ public class RegisterPanel : MonoBehaviour
         if (string.IsNullOrWhiteSpace(confirmPassword))
         {
             isError = true;
-            confirmPasswordField.gameObject.SetActive(true);
+            confirmPasswordError.gameObject.SetActive(true);
             confirmPasswordError.text = "Confirm password field is empty!";
             
         }else if (!password.Equals(confirmPassword))
         {
             isError = true;
-            confirmPasswordField.gameObject.SetActive(true);
+            confirmPasswordError.gameObject.SetActive(true);
             confirmPasswordError.text = "Confirm password does not match";
         }
         else
         {
-            confirmPasswordField.gameObject.SetActive(false);
+            confirmPasswordError.gameObject.SetActive(false);
         }
 
         if(isError) return;
@@ -91,30 +98,34 @@ public class RegisterPanel : MonoBehaviour
     {
         RegisterRequest registerRequest = new RegisterRequest(email, nickname, password);
         
-        await ClientAPI.CallPost<string, RegisterRequest>(
+        await ClientAPI.CallPost<RegisterResponse, RegisterRequest>(
             "/auth/register",
             registerRequest,
-            OnSuccessfull: (responseText, httpResponse) => {
+            OnSuccessfull: (response, httpResponse) => {
 
-                switch (responseText)
+                for (int i = 0; i < response.RegisterStatuses.Count; i++)
                 {
-                    case "EMAIL_EXIST":
-                        emailError.gameObject.SetActive(true);
-                        emailError.text = "Email is used!";
-                        break;
-                    case "NICKNAME_USED":
-                        nicknameError.gameObject.SetActive(true);
-                        nicknameError.text = "Nickname is used!";
-                        break;
-                    default:
-                        Debug.Log("Register successfu: " + responseText);
-                        UIMgr.Instance.ActiveElement("LoginPanel");
-                        emailField.text = "";
-                        nicknameField.text = "";
-                        passwordField.text = "";
-                        confirmPasswordField.text = "";
-                        loginPanel.SetEmail(email);
-                        break;
+                    RegisterStatus status = response.RegisterStatuses[i];
+                    
+                    switch (status)
+                    {
+                        case RegisterStatus.EMAIL_EXIST:
+                            emailError.gameObject.SetActive(true);
+                            emailError.text = "Email is used!";
+                            break;
+                        case RegisterStatus.NICKNAME_USED:
+                            nicknameError.gameObject.SetActive(true);
+                            nicknameError.text = "Nickname is used!";
+                            break;
+                        case RegisterStatus.OK:
+                            UIMgr.Instance.ActiveElement("LoginPanel");
+                            emailField.text = "";
+                            nicknameField.text = "";
+                            passwordField.text = "";
+                            confirmPasswordField.text = "";
+                            loginPanel.SetEmail(email);
+                            break;
+                    }
                 }
                     
             },
@@ -142,4 +153,13 @@ public class RegisterPanel : MonoBehaviour
             Password = password;
         }
     }
+    
+    public class RegisterResponse{
+        public List<RegisterStatus> RegisterStatuses { get; set; }
+
+        public RegisterResponse(List<RegisterStatus> registerStatuses) {
+            RegisterStatuses = registerStatuses;
+        }
+    }
+    
 }

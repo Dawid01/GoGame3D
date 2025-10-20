@@ -73,7 +73,11 @@ public class LoginPanel : MonoBehaviour
 
             },
             OnFailure: () => {
-                Debug.LogError("Error");
+                emailError.gameObject.SetActive(true);
+                passwordError.gameObject.SetActive(true);
+                emailError.text = "Email or password may be incorrect.";
+                passwordError.text = "Email or password may be incorrect.";
+                //Debug.LogError("Error");
             }
         );
 

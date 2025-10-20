@@ -2949,18 +2949,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &313473861 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 977897970676409031, guid: ac17bf5bcab22d941a3fbc5255340a16,
-    type: 3}
-  m_PrefabInstance: {fileID: 867588932}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &316057371
 GameObject:
   m_ObjectHideFlags: 0
@@ -15402,7 +15390,7 @@ MonoBehaviour:
   passwordField: {fileID: 1816032705}
   passwordError: {fileID: 1505501682}
   confirmPasswordField: {fileID: 1951199204}
-  confirmPasswordError: {fileID: 313473861}
+  confirmPasswordError: {fileID: 1533087718}
   loginPanel: {fileID: 1054637752}
 --- !u!1 &1311743225
 GameObject:
@@ -17774,6 +17762,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1533087716}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1533087718 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3120391140366972139, guid: ce632f3c41cb651429cd0915a915388e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1533087716}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1533370448
 GameObject:
   m_ObjectHideFlags: 0
