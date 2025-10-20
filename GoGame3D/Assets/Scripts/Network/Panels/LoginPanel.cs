@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoginPanel : MonoBehaviour
 {
@@ -12,11 +13,16 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] private TMP_InputField passwordField;
     [SerializeField] private TextMeshProUGUI passwordError;
 
+    [SerializeField] private Toggle rememberMeToggle;
+
 
     private void OnEnable()
     {
         emailError.text = "";
         passwordError.text = "";
+        string email = PlayerPrefs.GetString("RememberEmail", "");
+        rememberMeToggle.isOn = email.Length > 0;
+        emailField.text = email;
     }
 
     public void Login()
@@ -54,22 +60,23 @@ public class LoginPanel : MonoBehaviour
         }
         if(isError) return;
 
-        _ = LoginTask(email, password);
+        _ = LoginTask(email, password, rememberMeToggle.isOn);
     }
 
-    private async Task LoginTask(string email, string password)
+    private async Task LoginTask(string email, string password, bool remember)
     {
         LoginRequest loginRequest = new LoginRequest(email, password);
-        await ClientAPI.CallPost<string, LoginRequest>(
+        await ClientAPI.CallPost<User, LoginRequest>(
             "/auth/login",
             loginRequest,
-            OnSuccessfull: (responseText, httpResponse) => {
+            OnSuccessfull: (user, httpResponse) => {
                 
-                Debug.Log("Login successfu: " + responseText);
                 UIMgr.Instance.ActiveElement("Menu Panel");
-                ClientAPI.PlayerLoged(loginRequest);
+                ClientAPI.PlayerLoged(loginRequest, user);
+                UIMgr.Instance.IsLoggedInitialize();
                 emailField.text = "";
                 passwordField.text = "";
+                PlayerPrefs.SetString("RememberEmail", remember ? email : "");
 
             },
             OnFailure: () => {

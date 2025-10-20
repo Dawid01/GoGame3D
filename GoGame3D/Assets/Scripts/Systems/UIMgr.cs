@@ -28,12 +28,17 @@ public class UIMgr : Singleton<UIMgr>
     public Ease showHideEase;
     public bool isMobile;
 
+    [SerializeField] private GameObject[] multiplayerObjects;
+    [SerializeField] private Button multiplayerButton;
+
     public override void Awake()
     {
         base.Awake();
         isMobile = Application.isMobilePlatform;
         //isMobile = true;
         mobileUI.SetActive(isMobile);
+        ActiveElement("LoginPanel");
+        IsLoggedInitialize();
 
     }
     
@@ -164,7 +169,6 @@ public class UIMgr : Singleton<UIMgr>
         GameMgr.Instance.StartGame();
         DisactiveElementAnimation("Game Creator");
         SetPlayerBorderColor(StoneColor.BLACK, true);
-
     }
 
     public void Quit()
@@ -194,5 +198,18 @@ public class UIMgr : Singleton<UIMgr>
             clearMoveButton.gameObject.SetActive(active);
         });
     }
+
+    public void IsLoggedInitialize()
+    {
+        
+        for (int i = 0; i < multiplayerObjects.Length; i++)
+        {
+            multiplayerObjects[i].SetActive(ClientAPI.IsLogged);
+        }
+
+        multiplayerButton.interactable = ClientAPI.IsLogged;
+    }
+
+
 
 }
