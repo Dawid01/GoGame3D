@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class User : MonoBehaviour
+public class User
 {
     [JsonProperty("id")]
     public long Id { get; set; }

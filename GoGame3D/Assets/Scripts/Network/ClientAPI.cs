@@ -117,4 +117,10 @@ public class ClientAPI : MonoBehaviour
         else
             Debug.LogWarning("Image is null!");
     }
+
+    public static void Logout()
+    {
+        LoggedUser = null;
+        Client.DefaultRequestHeaders.Authorization = null;
+    }
 }

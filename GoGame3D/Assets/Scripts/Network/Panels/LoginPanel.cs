@@ -75,6 +75,7 @@ public class LoginPanel : MonoBehaviour
                 
                 UIMgr.Instance.ActiveElement("Menu Panel");
                 ClientAPI.PlayerLoged(loginRequest, user);
+                NetworkMgr.Instance.Connect();
                 UIMgr.Instance.IsLoggedInitialize();
                 emailField.text = "";
                 passwordField.text = "";

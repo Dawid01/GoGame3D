@@ -7,7 +7,7 @@ using UnityEngine;
 public class NetworkMgr : Singleton<NetworkMgr>
 {
     public WebSocket websocket;
-    private static readonly string ServerUrl = "ws://localhost:8080/GoGame/ws/game";
+    private static readonly string ServerUrl = "ws://localhost:8080/ws/game";
 
     
     async public void Connect()
