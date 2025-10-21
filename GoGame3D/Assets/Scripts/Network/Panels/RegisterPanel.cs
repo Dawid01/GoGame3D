@@ -98,6 +98,7 @@ public class RegisterPanel : MonoBehaviour
     {
         RegisterRequest registerRequest = new RegisterRequest(email, nickname, password);
         
+        UIMgr.Instance.ShowLoadingPanel();
         await ClientAPI.CallPost<RegisterResponse, RegisterRequest>(
             "/auth/register",
             registerRequest,
@@ -127,10 +128,12 @@ public class RegisterPanel : MonoBehaviour
                             break;
                     }
                 }
-                    
+                UIMgr.Instance.HideLoadingPanel();
+
             },
             OnFailure: () => {
                 Debug.LogError("Error");
+                UIMgr.Instance.HideLoadingPanel();
             }
         );
     }

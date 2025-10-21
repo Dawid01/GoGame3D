@@ -30,6 +30,7 @@ public class UIMgr : Singleton<UIMgr>
 
     [SerializeField] private GameObject[] multiplayerObjects;
     [SerializeField] private Button multiplayerButton;
+    [SerializeField] private LoadingPanel loadingPanel;
 
     public override void Awake()
     {
@@ -163,6 +164,18 @@ public class UIMgr : Singleton<UIMgr>
         });
     
     }
+
+    public void ShowLoadingPanel()
+    {
+        loadingPanel.gameObject.SetActive(true);
+        loadingPanel.Initialize();
+    }
+
+    public void HideLoadingPanel()
+    {
+        loadingPanel.gameObject.SetActive(false);
+    }
+
 
     public void OnStartGame()
     {

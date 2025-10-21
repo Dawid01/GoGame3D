@@ -15,9 +15,10 @@ public class LoginPanel : MonoBehaviour
 
     [SerializeField] private Toggle rememberMeToggle;
 
-
     private void OnEnable()
     {
+       
+
         emailError.text = "";
         passwordError.text = "";
         string email = PlayerPrefs.GetString("RememberEmail", "");
@@ -66,6 +67,7 @@ public class LoginPanel : MonoBehaviour
     private async Task LoginTask(string email, string password, bool remember)
     {
         LoginRequest loginRequest = new LoginRequest(email, password);
+        UIMgr.Instance.ShowLoadingPanel();
         await ClientAPI.CallPost<User, LoginRequest>(
             "/auth/login",
             loginRequest,
@@ -77,6 +79,7 @@ public class LoginPanel : MonoBehaviour
                 emailField.text = "";
                 passwordField.text = "";
                 PlayerPrefs.SetString("RememberEmail", remember ? email : "");
+                UIMgr.Instance.HideLoadingPanel();
 
             },
             OnFailure: () => {
@@ -84,6 +87,7 @@ public class LoginPanel : MonoBehaviour
                 passwordError.gameObject.SetActive(true);
                 emailError.text = "Email or password may be incorrect.";
                 passwordError.text = "Email or password may be incorrect.";
+                UIMgr.Instance.HideLoadingPanel();
                 //Debug.LogError("Error");
             }
         );

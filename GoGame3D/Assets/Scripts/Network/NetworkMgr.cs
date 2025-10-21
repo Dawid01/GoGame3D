@@ -14,7 +14,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
     {
         
         websocket = new WebSocket(ServerUrl);
-        websocket.OnOpen += async () =>
+        websocket.OnOpen += () =>
         {
             Debug.Log("Connection open!");
             
