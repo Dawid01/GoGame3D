@@ -8,6 +8,7 @@ public class ShowHideAnimation : MonoBehaviour
     [SerializeField] private Vector3 hidePosition;
     [SerializeField] private Vector3 showPosition;
     [HideInInspector] public bool isHiden = true;
+    [SerializeField] private Transform arrow;
     private bool _blockInput = false;
 
     private void OnEnable()
@@ -42,6 +43,7 @@ public class ShowHideAnimation : MonoBehaviour
         {
             _blockInput = false;
         }).SetDelay(delay);
+        arrow.localScale = new Vector3(-1f, 1f, 1f);
     }
 
     public void ForceHide()
@@ -58,5 +60,6 @@ public class ShowHideAnimation : MonoBehaviour
         {
             _blockInput = false;
         });
+        arrow.localScale = new Vector3(1f, 1f, 1f);
     }
 }
