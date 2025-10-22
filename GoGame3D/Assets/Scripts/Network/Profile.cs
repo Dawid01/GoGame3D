@@ -27,6 +27,7 @@ public class Profile : MonoBehaviour
          }
 
          ClientAPI.Logout();
+         NetworkMgr.Instance.websocket.Close();
          avatar.sprite = _userDefaultSprite;
          nicknameText.text = "";
          UIMgr.Instance.ActiveElement("LoginPanel");

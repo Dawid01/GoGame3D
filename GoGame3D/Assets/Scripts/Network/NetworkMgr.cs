@@ -8,7 +8,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
 {
     public WebSocket websocket;
     private static readonly string ServerUrl = "ws://localhost:8080/ws/game";
-
+    public PlayerData currentPlayer;
     
     async public void Connect()
     {
@@ -17,7 +17,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
         websocket.OnOpen += () =>
         {
             Debug.Log("Connection open!");
-            
+
         };
 
         websocket.OnError += (e) =>
@@ -89,22 +89,40 @@ public class NetworkMgr : Singleton<NetworkMgr>
 
         switch (baseMsg.type)
         {
-            case "EXAMPLE":
-                var msg = JsonUtility.FromJson<GameMessage<long>>(json);
+            case "ASSIGN_ID":
+                var msg = JsonUtility.FromJson<GameMessage<GameMessageBase>>(json);
+                currentPlayer = new PlayerData(msg.sessionId, ClientAPI.LoggedUser);
+                InitializePlayer();
                 break;
             default:
                 break;
         }
+        
     }
-    
+
+
+    private void InitializePlayer()
+    {
+        GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
+        msg.type = "INIT_PLAYER";
+        msg.sessionId = currentPlayer.sessionId;
+        msg.data = currentPlayer;
+        SendWebSocketMessage(msg);
+    }
+
+    public void CreateRoom()
+    {
+        
+    }
 }
+
+
 
 [Serializable]
 public class GameMessageBase
 {
-    public string playerId;
     public string type;
-    public string roomId;
+    public string sessionId;
 
 }
 
@@ -112,4 +130,21 @@ public class GameMessageBase
 public class GameMessage<T> : GameMessageBase
 {
     public T data;
+    public string roomId;
 }
+
+[Serializable]
+public class PlayerData
+{
+    public string sessionId;
+    public User user;
+
+    public PlayerData(string sessionId, User user)
+    {
+        this.sessionId = sessionId;
+        this.user = user;
+    }
+}
+
+
+
