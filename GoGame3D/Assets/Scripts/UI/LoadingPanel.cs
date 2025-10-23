@@ -10,6 +10,7 @@ public class LoadingPanel : MonoBehaviour
     
     public void Initialize()
     {
+        if(_sequence != null) return;
         float duration = 2f;
         transform.SetAsLastSibling();
         _sequence = DOTween.Sequence().SetLink(gameObject);
