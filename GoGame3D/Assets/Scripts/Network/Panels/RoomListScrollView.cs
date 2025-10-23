@@ -45,10 +45,10 @@ public class RoomListScrollView : MonoBehaviour
     public void LoadRooms(List<Room> rooms)
     {
         Clear();
-        for (int i = 0; i < rooms.Count; i++)
-        {
+        foreach (var room in rooms)
+        { 
             RoomItem item = Instantiate(roomItem, content);
-            item.Initialize(rooms[i]);
+            item.Initialize(room);
         }
         emptyInfo.SetActive(rooms.Count == 0);
     }
@@ -62,6 +62,8 @@ public class RoomListScrollView : MonoBehaviour
             "/rooms",
             OnSuccessfull: (rooms, response) => {
                 loadingPanel.gameObject.SetActive(false);
+                string jsonString = JsonConvert.SerializeObject(rooms, Formatting.Indented);
+                Debug.Log(jsonString);
                 if (response.IsSuccessStatusCode)
                 {
                     Debug.Log("ROOMS LOAD SUCC");
@@ -71,9 +73,9 @@ public class RoomListScrollView : MonoBehaviour
             OnFailure: () => {
                 Debug.Log("ROOMS LOAD FAIL");
                 loadingPanel.gameObject.SetActive(false);
-
             }
         );
+
 
     }
     

@@ -17,8 +17,6 @@ public class LoginPanel : MonoBehaviour
 
     private void OnEnable()
     {
-       
-
         emailError.text = "";
         passwordError.text = "";
         string email = PlayerPrefs.GetString("RememberEmail", "");

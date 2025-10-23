@@ -12,19 +12,19 @@ public class RoomItem : MonoBehaviour
 
     public void Initialize(Room room)
     {
-        roomNameText.text = room.name;
+        roomNameText.text = room.RoomName;
         playersText.text = "";
         
-        joinButton.onClick.AddListener(() =>
-        {
-            // ClientAPI.CallPost("/rooms/create", new CreateRoomRequest(), OnSuccessfull: () =>
-            // {
-            //
-            // }, () =>
-            // {
-            //     
-            // });
-        });
+        // joinButton.onClick.AddListener(() =>
+        // {
+        //     // ClientAPI.CallPost("/rooms/create", new CreateRoomRequest(), OnSuccessfull: () =>
+        //     // {
+        //     //
+        //     // }, () =>
+        //     // {
+        //     //     
+        //     // });
+        // });
     }
 }
 

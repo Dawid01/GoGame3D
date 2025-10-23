@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class Room : MonoBehaviour
+public class Room
 {
     [JsonProperty("roomId")]
     public String RoomId { get; set; }
     [JsonProperty("roomName")]
-    private String RoomName { get; set; }
+    public String RoomName { get; set; }
     [JsonProperty("players")]
-    private List<PlayerData> Players { get; set; }
+    public List<PlayerData> Players { get; set; }
 
     public Room(string roomId, string roomName, List<PlayerData> players)
     {
@@ -22,14 +22,14 @@ public class Room : MonoBehaviour
 
 [Serializable]
 public class CreateRoomRequest {
-    [JsonProperty("playerId")]
-    public String PlayerId { get; set; }
-    [JsonProperty("playerId")]
+    [JsonProperty("sessionId")]
+    public String SessionId { get; set; }
+    [JsonProperty("roomName")]
     public String RoomName { get; set; }
 
-    public CreateRoomRequest(string playerId, string roomName)
+    public CreateRoomRequest(string sessionId, string roomName)
     {
-        PlayerId = playerId;
+        SessionId = sessionId;
         RoomName = roomName;
     }
 }
@@ -38,7 +38,7 @@ public class CreateRoomRequest {
 public class JoinRoomRequest {
     [JsonProperty("roomId")]
     public String RoomId { get; set; }
-    [JsonProperty("roomId")]
+    [JsonProperty("playerId")]
     public String PlayerId { get; set; }
 
     public JoinRoomRequest(string roomId, string playerId)
