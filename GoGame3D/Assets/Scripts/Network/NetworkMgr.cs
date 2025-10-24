@@ -42,7 +42,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
     
     async Task KeepAliveLoop()
     {
-        while (true)
+        while (currentPlayer != null)
         {
             if (websocket.State == WebSocketState.Open)
                 await websocket.SendText("ping");

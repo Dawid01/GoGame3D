@@ -121,6 +121,7 @@ public class ClientAPI : MonoBehaviour
     public static void Logout()
     {
         LoggedUser = null;
+        IsLogged = false;
         Client.DefaultRequestHeaders.Authorization = null;
     }
 }
