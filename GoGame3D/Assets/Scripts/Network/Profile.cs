@@ -26,11 +26,12 @@ public class Profile : MonoBehaviour
             GameMgr.Instance.hasGameStarted = false;
          }
 
-         ClientAPI.Logout();
-         NetworkMgr.Instance.websocket.Close();
+         //ClientAPI.Logout();
+         //NetworkMgr.Instance.websocket.Close();
+         NetworkMgr.Instance.Logout();
          avatar.sprite = _userDefaultSprite;
          nicknameText.text = "";
-         UIMgr.Instance.ActiveElement("LoginPanel");
+         //UIMgr.Instance.ActiveElement("LoginPanel");
          canvasGroup.alpha = 0.25f;
          logoutButton.gameObject.SetActive(false);
          gameObject.SetActive(false);

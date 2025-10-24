@@ -23,30 +23,7 @@ public class CreateRoomPanel : MonoBehaviour
         }
         
         if(isError) return;
-        _ = CreateRoomTask(name);
+        RoomsMgr.Instance.CreateRoom(name);
     }
     
-    private async Task CreateRoomTask(string name)
-    {
-        CreateRoomRequest createRoomRequest = new CreateRoomRequest(NetworkMgr.Instance.currentPlayer.sessionId, name);
-        UIMgr.Instance.ShowLoadingPanel();
-        await ClientAPI.CallPost<string, CreateRoomRequest>(
-            "/rooms/create",
-            createRoomRequest,
-            OnSuccessfull: (user, httpResponse) =>
-            {
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    nameField.text = "";
-                }
-
-                UIMgr.Instance.HideLoadingPanel();
-
-            },
-            OnFailure: () => {
-                UIMgr.Instance.HideLoadingPanel();
-            }
-        );
-
-    }
 }

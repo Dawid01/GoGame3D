@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using UnityEngine;
 
+[Serializable]
 public class User
 {
     [JsonProperty("id")]

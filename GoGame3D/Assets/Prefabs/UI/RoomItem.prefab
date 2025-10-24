@@ -686,7 +686,7 @@ PrefabInstance:
     - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}
@@ -700,18 +700,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3132019023319617062}
+    - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UIMgr, Assembly-CSharp
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Menu Panel
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1472981037607053029, guid: ac17bf5bcab22d941a3fbc5255340a16,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2361517742343698562, guid: ac17bf5bcab22d941a3fbc5255340a16,
         type: 3}

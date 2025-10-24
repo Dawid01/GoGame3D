@@ -8,12 +8,14 @@ public class NetworkMgr : Singleton<NetworkMgr>
 {
     public WebSocket websocket;
     private static readonly string ServerUrl = "ws://localhost:8080/ws/game";
+
     public PlayerData currentPlayer;
     
     async public void Connect()
     {
         
         websocket = new WebSocket(ServerUrl);
+
         websocket.OnOpen += () =>
         {
             Debug.Log("Connection open!");
@@ -23,11 +25,13 @@ public class NetworkMgr : Singleton<NetworkMgr>
         websocket.OnError += (e) =>
         {
             Debug.Log("Error! " + e);
+            Logout();
         };
 
         websocket.OnClose += (e) =>
         {
             Debug.Log("Connection closed! Close code: " + e);
+            Logout();
         };
 
         websocket.OnMessage += (bytes) =>
@@ -104,8 +108,9 @@ public class NetworkMgr : Singleton<NetworkMgr>
     private void InitializePlayer()
     {
         GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
-        msg.type = "INIT_PLAYER";
+        msg.type = "PLAYER_INIT";
         msg.sessionId = currentPlayer.sessionId;
+        currentPlayer.user = ClientAPI.LoggedUser;
         msg.data = currentPlayer;
         SendWebSocketMessage(msg);
     }
@@ -113,6 +118,14 @@ public class NetworkMgr : Singleton<NetworkMgr>
     public void CreateRoom()
     {
         
+    }
+
+    public void Logout()
+    {
+        ClientAPI.Logout();
+        websocket.Close();
+        currentPlayer = null;
+        UIMgr.Instance.ActiveElement("LoginPanel");
     }
 }
 

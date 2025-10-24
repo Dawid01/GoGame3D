@@ -15,16 +15,10 @@ public class RoomItem : MonoBehaviour
         roomNameText.text = room.RoomName;
         playersText.text = "";
         
-        // joinButton.onClick.AddListener(() =>
-        // {
-        //     // ClientAPI.CallPost("/rooms/create", new CreateRoomRequest(), OnSuccessfull: () =>
-        //     // {
-        //     //
-        //     // }, () =>
-        //     // {
-        //     //     
-        //     // });
-        // });
+        joinButton.onClick.AddListener(() =>
+        {
+            _ = RoomsMgr.Instance.JoinRoom(room.RoomId);
+        });
     }
 }
 
