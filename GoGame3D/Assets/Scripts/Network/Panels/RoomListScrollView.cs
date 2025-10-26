@@ -60,7 +60,7 @@ public class RoomListScrollView : MonoBehaviour
         loadingPanel.Initialize();
         await ClientAPI.CallGet<List<Room>>(
             "/rooms",
-            OnSuccessfull: (rooms, response) => {
+            (rooms, response) => {
                 loadingPanel.gameObject.SetActive(false);
                 string jsonString = JsonConvert.SerializeObject(rooms, Formatting.Indented);
                 Debug.Log(jsonString);

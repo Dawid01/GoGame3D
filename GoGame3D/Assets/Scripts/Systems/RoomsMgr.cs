@@ -24,7 +24,7 @@ public class RoomsMgr : Singleton<RoomsMgr>
             (id, response) => {
                 UIMgr.Instance.HideLoadingPanel();
                 Debug.Log("Room created: " + id);
-                //_ = JoinRoom(room.roomId);
+                _ = JoinRoom(id);
             },
             () => {
                 UIMgr.Instance.HideLoadingPanel();

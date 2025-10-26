@@ -40,9 +40,9 @@ public class Profile : MonoBehaviour
 
    private void OnEnable()
    {
-      if(!ClientAPI.IsLogged) return;
-      nicknameText.text = ClientAPI.LoggedUser.nickname;
-      _ = ClientAPI.LoadImageAsync($"{BaseAvatarURL}{ClientAPI.LoggedUser.nickname}&bold=true", avatar);
+      // if(!ClientAPI.IsLogged) return;
+      // nicknameText.text = ClientAPI.LoggedUser.nickname;
+      // _ = ClientAPI.LoadImageAsync($"{BaseAvatarURL}{ClientAPI.LoggedUser.nickname}&bold=true", avatar);
    }
     
 }

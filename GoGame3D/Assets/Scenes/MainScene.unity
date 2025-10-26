@@ -35697,7 +35697,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1823687288}
   - component: {fileID: 1823687289}
-  - component: {fileID: 1823687290}
   m_Layer: 0
   m_Name: NETWOKR_MGR
   m_TagString: Untagged
@@ -35739,18 +35738,6 @@ MonoBehaviour:
       email: 
       nickname: 
       role: 
---- !u!114 &1823687290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823687287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3660390e337121488a4f6fd07a462b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnityMainThreadDispatcher
 --- !u!1 &1826414630
 GameObject:
   m_ObjectHideFlags: 0

@@ -66,32 +66,40 @@ public class LoginPanel : MonoBehaviour
     {
         LoginRequest loginRequest = new LoginRequest(email, password);
         UIMgr.Instance.ShowLoadingPanel();
-        await ClientAPI.CallPost<User, LoginRequest>(
+
+        await ClientAPI.CallPost<ClientAPI.AuthTokens, LoginRequest>(
             "/auth/login",
             loginRequest,
-            OnSuccessfull: (user, httpResponse) => {
-                
+            (authTokens, httpResponse) => 
+            {
+                if (authTokens == null || string.IsNullOrEmpty(authTokens.accessToken))
+                {
+                    Debug.LogError("Login failed: no access token returned");
+                    UIMgr.Instance.HideLoadingPanel();
+                    return;
+                }
+
+                ClientAPI.PlayerLogged(authTokens.user, authTokens.accessToken, authTokens.refreshToken);
+
                 UIMgr.Instance.ActiveElement("Menu Panel");
-                ClientAPI.PlayerLoged(loginRequest, user);
                 NetworkMgr.Instance.Connect();
                 UIMgr.Instance.IsLoggedInitialize();
                 emailField.text = "";
                 passwordField.text = "";
                 PlayerPrefs.SetString("RememberEmail", remember ? email : "");
                 UIMgr.Instance.HideLoadingPanel();
-
             },
-            OnFailure: () => {
+            OnFailure: () => 
+            {
                 emailError.gameObject.SetActive(true);
                 passwordError.gameObject.SetActive(true);
                 emailError.text = "Email or password may be incorrect.";
                 passwordError.text = "Email or password may be incorrect.";
                 UIMgr.Instance.HideLoadingPanel();
-                //Debug.LogError("Error");
             }
         );
-
     }
+
 
     public void SetEmail(string email)
     {

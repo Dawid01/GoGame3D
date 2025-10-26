@@ -102,7 +102,7 @@ public class RegisterPanel : MonoBehaviour
         await ClientAPI.CallPost<RegisterResponse, RegisterRequest>(
             "/auth/register",
             registerRequest,
-            OnSuccessfull: (response, httpResponse) => {
+            (response, httpResponse) => {
 
                 for (int i = 0; i < response.RegisterStatuses.Count; i++)
                 {

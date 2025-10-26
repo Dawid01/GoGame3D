@@ -10,22 +10,42 @@ using UnityEngine.UI;
 
 public class ClientAPI : MonoBehaviour
 {
-
     private static readonly string BaseURL = "http://localhost:8080";
     private static readonly HttpClient Client = new HttpClient();
+
     public static bool IsLogged { get; private set; }
     public static User LoggedUser { get; private set; }
 
-    public static async Task CallGet<T>(string call, Action<T, HttpResponseMessage> OnSuccessfull = null, Action OnFailure = null, CancellationToken cancellationToken = default)
+    public static class AuthStorage
+    {
+        public static string AccessToken { get; set; }
+        public static string RefreshToken { get; set; }
+    }
+
+    public static async Task CallGet<T>(string call, Action<T, HttpResponseMessage> OnSuccess = null, Action OnFailure = null, CancellationToken cancellationToken = default)
     {
         try
         {
+            AddAuthorizationHeader();
             using HttpResponseMessage response = await Client.GetAsync(BaseURL + call, cancellationToken);
             string responseBody = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
                 T result = JsonConvert.DeserializeObject<T>(responseBody);
-                OnSuccessfull?.Invoke(result, response);
+                OnSuccess?.Invoke(result, response);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                bool refreshed = await RefreshAccessToken();
+                if (refreshed)
+                {
+                    await CallGet<T>(call, OnSuccess, OnFailure, cancellationToken);
+                }
+                else
+                {
+                    OnFailure?.Invoke();
+                }
             }
             else
             {
@@ -38,35 +58,42 @@ public class ClientAPI : MonoBehaviour
             Debug.LogError(e);
             OnFailure?.Invoke();
         }
-        
     }
+
     
-    public static async Task CallPost<T, U>(string call, U data, Action<T, HttpResponseMessage> OnSuccessfull = null, Action OnFailure = null, CancellationToken cancellationToken = default)
+    public static async Task CallPost<T, U>(string call, U data, Action<T, HttpResponseMessage> OnSuccess = null, Action OnFailure = null, CancellationToken cancellationToken = default)
     {
         try
         {
+            AddAuthorizationHeader();
+
             string json = JsonConvert.SerializeObject(data);
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
             using HttpResponseMessage response = await Client.PostAsync(BaseURL + call, content, cancellationToken);
+
             string responseBody = await response.Content.ReadAsStringAsync();
-            
+
             if (response.IsSuccessStatusCode)
             {
-                if (typeof(T) == typeof(string))
+                T result = typeof(T) == typeof(string)
+                    ? (T)(object)responseBody
+                    : JsonConvert.DeserializeObject<T>(responseBody);
+
+                OnSuccess?.Invoke(result, response);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                bool refreshed = await RefreshAccessToken();
+                if (refreshed)
                 {
-                    OnSuccessfull?.Invoke((T)(object)responseBody, response);
+                    await CallPost<T, U>(call, data, OnSuccess, OnFailure, cancellationToken);
                 }
                 else
                 {
-                    T result = JsonConvert.DeserializeObject<T>(responseBody);
-                    OnSuccessfull?.Invoke(result, response);
+                    OnFailure?.Invoke();
                 }
             }
-            else
-            {
-                Debug.LogError("CallPost failed: " + response.StatusCode);
-                OnFailure?.Invoke();
-            }
+
         }
         catch (HttpRequestException e)
         {
@@ -75,16 +102,66 @@ public class ClientAPI : MonoBehaviour
         }
     }
     
-    public static void PlayerLoged(LoginRequest loginRequest, User user)
+    public static async Task<bool> RefreshAccessToken()
+    {
+        if (string.IsNullOrEmpty(AuthStorage.RefreshToken))
+            return false;
+
+        var data = new { refreshToken = AuthStorage.RefreshToken };
+        bool success = false;
+
+        await CallPost<AuthTokens, object>(
+            "/auth/refresh",
+            data,
+            (authTokens, response) =>
+            {
+                if (authTokens != null && !string.IsNullOrEmpty(authTokens.accessToken))
+                {
+                    AuthStorage.AccessToken = authTokens.accessToken;
+                    AuthStorage.RefreshToken = authTokens.refreshToken;
+                    LoggedUser = authTokens.user;
+                    success = true;
+                }
+            },
+            OnFailure: () =>
+            {
+                Logout(); // refresh się nie powiódł → wyloguj
+                success = false;
+            }
+        );
+
+        return success;
+    }
+
+
+    private static void AddAuthorizationHeader()
+    {
+        Client.DefaultRequestHeaders.Authorization = null;
+
+        if (!string.IsNullOrEmpty(AuthStorage.AccessToken))
+        {
+            Client.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthStorage.AccessToken);
+        }
+    }
+
+    public static void PlayerLogged(User user, string accessToken, string refreshToken)
     {
         IsLogged = true;
         LoggedUser = user;
-        string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(loginRequest.Email + ":" + loginRequest.Password));
-        Client.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
-        
+        AuthStorage.AccessToken = accessToken;
+        AuthStorage.RefreshToken = refreshToken;
     }
-    
+
+    public static void Logout()
+    {
+        LoggedUser = null;
+        IsLogged = false;
+        AuthStorage.AccessToken = null;
+        AuthStorage.RefreshToken = null;
+        Client.DefaultRequestHeaders.Authorization = null;
+    }
+
     public static async Task LoadImageAsync(string url, Image img)
     {
         if (string.IsNullOrEmpty(url))
@@ -118,10 +195,11 @@ public class ClientAPI : MonoBehaviour
             Debug.LogWarning("Image is null!");
     }
 
-    public static void Logout()
+    [Serializable]
+    public class AuthTokens
     {
-        LoggedUser = null;
-        IsLogged = false;
-        Client.DefaultRequestHeaders.Authorization = null;
+        public string accessToken;
+        public string refreshToken;
+        public User user;
     }
 }
