@@ -64,11 +64,8 @@ public class RoomListScrollView : MonoBehaviour
                 loadingPanel.gameObject.SetActive(false);
                 string jsonString = JsonConvert.SerializeObject(rooms, Formatting.Indented);
                 Debug.Log(jsonString);
-                if (response.IsSuccessStatusCode)
-                {
-                    Debug.Log("ROOMS LOAD SUCC");
-                    LoadRooms(rooms);
-                }
+                Debug.Log("ROOMS LOAD SUCC");
+                LoadRooms(rooms);
             },
             OnFailure: () => {
                 Debug.Log("ROOMS LOAD FAIL");

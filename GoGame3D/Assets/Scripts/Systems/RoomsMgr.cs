@@ -18,17 +18,13 @@ public class RoomsMgr : Singleton<RoomsMgr>
     {
         CreateRoomRequest request = new CreateRoomRequest(NetworkMgr.Instance.currentPlayer.sessionId, roomName);
         UIMgr.Instance.ShowLoadingPanel();
-
-        await ClientAPI.CallPost<Room, CreateRoomRequest>(
+        await ClientAPI.CallPost<String, CreateRoomRequest>(
             "/rooms/create",
             request,
-            (room, response) => {
+            (id, response) => {
                 UIMgr.Instance.HideLoadingPanel();
-                if (response.IsSuccessStatusCode)
-                {
-                    Debug.Log("Room created: " + room.RoomName + " " + room.RoomId);
-                    _ = JoinRoom(room.RoomId);
-                } 
+                Debug.Log("Room created: " + id);
+                //_ = JoinRoom(room.roomId);
             },
             () => {
                 UIMgr.Instance.HideLoadingPanel();
@@ -42,11 +38,7 @@ public class RoomsMgr : Singleton<RoomsMgr>
                 "/rooms/join",
                 new JoinRoomRequest (roomId, NetworkMgr.Instance.currentPlayer.sessionId),
                 (obj, response) => {
-                    if (response.IsSuccessStatusCode)
-                    {
-                       // NetworkMgr.Instance.JoinPlayer(roomId);
-                       UIMgr.Instance.ActiveElement("Room Panel");
-                    }
+                    UIMgr.Instance.ActiveElement("Room Panel");
                 },
                 () => {
                    
@@ -57,31 +49,29 @@ public class RoomsMgr : Singleton<RoomsMgr>
     
     
     [Serializable]
-    public class CreateRoomRequest {
-        [JsonProperty("sessionId")]
-        public String SessionId { get; set; }
-        [JsonProperty("roomName")]
-        public String RoomName { get; set; }
+    public class CreateRoomRequest
+    {
+        public String sessionId;
+        public String roomName;
 
         public CreateRoomRequest(string sessionId, string roomName)
         {
-            SessionId = sessionId;
-            RoomName = roomName;
+            this.sessionId = sessionId;
+            this.roomName = roomName;
         }
     }
 
     [Serializable]
-    public class JoinRoomRequest {
-        [JsonProperty("roomId")]
-        public String RoomId { get; set; }
-        
-        [JsonProperty("sessionId")]
-        public String SessionId { get; set; }
+    public class JoinRoomRequest
+    {
+
+        public String roomId;
+        public String sessionId;
 
         public JoinRoomRequest(string roomId, string sessionId)
         {
-            RoomId = roomId;
-            SessionId = sessionId;
+            this.roomId = roomId;
+            this.sessionId = sessionId;
         }
     }
 }

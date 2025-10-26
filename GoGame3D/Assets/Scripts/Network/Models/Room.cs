@@ -5,18 +5,15 @@ using UnityEngine;
 
 public class Room
 {
-    [JsonProperty("roomId")]
-    public String RoomId { get; set; }
-    [JsonProperty("roomName")]
-    public String RoomName { get; set; }
-    [JsonProperty("players")]
-    public List<PlayerData> Players { get; set; }
+    public String roomId;
+    public String roomName;
+    public HashSet<PlayerData> players;
 
-    public Room(string roomId, string roomName, List<PlayerData> players)
+    public Room(String roomId, String roomName, HashSet<PlayerData> players)
     {
-        RoomId = roomId;
-        RoomName = roomName;
-        Players = players;
+        this.roomId = roomId;
+        this.roomName = roomName;
+        this.players = players;
     }
 }
 

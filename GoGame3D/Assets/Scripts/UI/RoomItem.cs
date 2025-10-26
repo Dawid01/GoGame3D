@@ -12,12 +12,12 @@ public class RoomItem : MonoBehaviour
 
     public void Initialize(Room room)
     {
-        roomNameText.text = room.RoomName;
+        roomNameText.text = room.roomName;
         playersText.text = "";
         
         joinButton.onClick.AddListener(() =>
         {
-            _ = RoomsMgr.Instance.JoinRoom(room.RoomId);
+            _ = RoomsMgr.Instance.JoinRoom(room.roomId);
         });
     }
 }

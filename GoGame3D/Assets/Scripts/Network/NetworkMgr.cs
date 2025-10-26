@@ -94,7 +94,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
         switch (baseMsg.type)
         {
             case "ASSIGN_ID":
-                var msg = JsonUtility.FromJson<GameMessage<GameMessageBase>>(json);
+                var msg = JsonUtility.FromJson<GameMessageBase>(json);
                 currentPlayer = new PlayerData(msg.sessionId, ClientAPI.LoggedUser);
                 InitializePlayer();
                 break;
@@ -107,11 +107,14 @@ public class NetworkMgr : Singleton<NetworkMgr>
 
     private void InitializePlayer()
     {
-        GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
+        // GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
+        // msg.type = "PLAYER_INIT";
+        // msg.sessionId = currentPlayer.sessionId;
+        // msg.data = currentPlayer;
+        GameMessage<User> msg = new GameMessage<User>();
         msg.type = "PLAYER_INIT";
         msg.sessionId = currentPlayer.sessionId;
-        currentPlayer.user = ClientAPI.LoggedUser;
-        msg.data = currentPlayer;
+        msg.data = currentPlayer.user;
         SendWebSocketMessage(msg);
     }
 
@@ -142,8 +145,9 @@ public class GameMessageBase
 [Serializable]
 public class GameMessage<T> : GameMessageBase
 {
-    public T data;
     public string roomId;
+    public T data;
+
 }
 
 [Serializable]
