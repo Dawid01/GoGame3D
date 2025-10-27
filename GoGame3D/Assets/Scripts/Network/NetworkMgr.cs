@@ -7,7 +7,7 @@ using UnityEngine;
 public class NetworkMgr : Singleton<NetworkMgr>
 {
     public WebSocket websocket;
-    private static readonly string ServerUrl = "ws://localhost:8080/ws/game";
+    private static string ServerUrl => $"ws://localhost:8080/ws/game?token={ClientAPI.AuthStorage.AccessToken}";
 
     public PlayerData currentPlayer;
     
@@ -96,7 +96,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
             case "ASSIGN_ID":
                 var msg = JsonUtility.FromJson<GameMessageBase>(json);
                 currentPlayer = new PlayerData(msg.sessionId, ClientAPI.LoggedUser);
-                InitializePlayer();
+                //InitializePlayer();
                 break;
             default:
                 break;

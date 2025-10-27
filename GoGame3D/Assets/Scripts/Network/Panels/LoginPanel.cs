@@ -79,7 +79,7 @@ public class LoginPanel : MonoBehaviour
                     return;
                 }
 
-                ClientAPI.PlayerLogged(authTokens.user, authTokens.accessToken, authTokens.refreshToken);
+                ClientAPI.PlayerLogged(authTokens.userDTO, authTokens.accessToken, authTokens.refreshToken);
 
                 UIMgr.Instance.ActiveElement("Menu Panel");
                 NetworkMgr.Instance.Connect();

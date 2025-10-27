@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ClientAPI : MonoBehaviour
@@ -119,7 +120,7 @@ public class ClientAPI : MonoBehaviour
                 {
                     AuthStorage.AccessToken = authTokens.accessToken;
                     AuthStorage.RefreshToken = authTokens.refreshToken;
-                    LoggedUser = authTokens.user;
+                    LoggedUser = authTokens.userDTO;
                     success = true;
                 }
             },
@@ -200,6 +201,6 @@ public class ClientAPI : MonoBehaviour
     {
         public string accessToken;
         public string refreshToken;
-        public User user;
+        public User userDTO;
     }
 }
