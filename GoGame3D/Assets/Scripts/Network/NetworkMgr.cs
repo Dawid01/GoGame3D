@@ -6,41 +6,42 @@ using UnityEngine;
 
 public class NetworkMgr : Singleton<NetworkMgr>
 {
-    public WebSocket websocket;
+    public WebSocket Websocket;
     private static string ServerUrl => $"ws://localhost:8080/ws/game?token={ClientAPI.AuthStorage.AccessToken}";
 
     public PlayerData currentPlayer;
+    public Room currentRoom;
     
     async public void Connect()
     {
         
-        websocket = new WebSocket(ServerUrl);
+        Websocket = new WebSocket(ServerUrl);
 
-        websocket.OnOpen += () =>
+        Websocket.OnOpen += () =>
         {
             Debug.Log("Connection open!");
 
         };
 
-        websocket.OnError += (e) =>
+        Websocket.OnError += (e) =>
         {
             Debug.Log("Error! " + e);
             Logout();
         };
 
-        websocket.OnClose += (e) =>
+        Websocket.OnClose += (e) =>
         {
             Debug.Log("Connection closed! Close code: " + e);
             Logout();
         };
 
-        websocket.OnMessage += (bytes) =>
+        Websocket.OnMessage += (bytes) =>
         {
             string msg = Encoding.UTF8.GetString(bytes);
             HandleIncomingMessage(msg);
             
         };
-        await websocket.Connect();
+        await Websocket.Connect();
         _ = KeepAliveLoop();
     }
     
@@ -48,35 +49,35 @@ public class NetworkMgr : Singleton<NetworkMgr>
     {
         while (currentPlayer != null)
         {
-            if (websocket.State == WebSocketState.Open)
-                await websocket.SendText("ping");
+            if (Websocket.State == WebSocketState.Open)
+                await Websocket.SendText("ping");
             await Task.Delay(5000);
         }
     }
     
     private void Update()
     {
-        if(websocket == null) return;
+        if(Websocket == null) return;
 #if !UNITY_WEBGL || UNITY_EDITOR
-        websocket.DispatchMessageQueue();
+        Websocket.DispatchMessageQueue();
 #endif
     }
     
     private async void OnApplicationQuit()
     {
-        if (websocket != null && websocket.State == WebSocketState.Open)
+        if (Websocket != null && Websocket.State == WebSocketState.Open)
         {
-            await websocket.Close();
+            await Websocket.Close();
         }
         
     }
     
     public void SendWebSocketMessage<T>(GameMessage<T> message)
     {
-        if(websocket != null && websocket.State == WebSocketState.Open)
+        if(Websocket != null && Websocket.State == WebSocketState.Open)
         {
             string jsonMessage = JsonUtility.ToJson(message);
-            websocket.SendText(jsonMessage);
+            Websocket.SendText(jsonMessage);
         }
     }
     
@@ -105,18 +106,18 @@ public class NetworkMgr : Singleton<NetworkMgr>
     }
 
 
-    private void InitializePlayer()
-    {
-        // GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
-        // msg.type = "PLAYER_INIT";
-        // msg.sessionId = currentPlayer.sessionId;
-        // msg.data = currentPlayer;
-        GameMessage<User> msg = new GameMessage<User>();
-        msg.type = "PLAYER_INIT";
-        msg.sessionId = currentPlayer.sessionId;
-        msg.data = currentPlayer.user;
-        SendWebSocketMessage(msg);
-    }
+    // private void InitializePlayer()
+    // {
+    //     // GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
+    //     // msg.type = "PLAYER_INIT";
+    //     // msg.sessionId = currentPlayer.sessionId;
+    //     // msg.data = currentPlayer;
+    //     GameMessage<User> msg = new GameMessage<User>();
+    //     msg.type = "PLAYER_INIT";
+    //     msg.sessionId = currentPlayer.sessionId;
+    //     msg.data = currentPlayer.user;
+    //     SendWebSocketMessage(msg);
+    // }
 
     public void CreateRoom()
     {
@@ -126,7 +127,7 @@ public class NetworkMgr : Singleton<NetworkMgr>
     public void Logout()
     {
         ClientAPI.Logout();
-        websocket.Close();
+        Websocket.Close();
         currentPlayer = null;
         UIMgr.Instance.ActiveElement("LoginPanel");
     }

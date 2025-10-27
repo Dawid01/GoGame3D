@@ -34,10 +34,12 @@ public class RoomsMgr : Singleton<RoomsMgr>
     
     public async Task JoinRoom(String roomId)
     {
-        await ClientAPI.CallPost<object, JoinRoomRequest>(
+        await ClientAPI.CallPost<Room, JoinRoomRequest>(
                 "/rooms/join",
                 new JoinRoomRequest (roomId, NetworkMgr.Instance.currentPlayer.sessionId),
-                (obj, response) => {
+                (room, response) => {
+                    if(room == null) return;
+                    NetworkMgr.Instance.currentRoom = room;
                     UIMgr.Instance.ActiveElement("Room Panel");
                 },
                 () => {
