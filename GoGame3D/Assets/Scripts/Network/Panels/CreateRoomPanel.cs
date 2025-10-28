@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -8,7 +9,17 @@ public class CreateRoomPanel : MonoBehaviour
 
     [SerializeField] private TMP_InputField nameField;
     [SerializeField] private TextMeshProUGUI nameError;
-    
+    [SerializeField] private TextMeshProUGUI characterLimit;
+
+    private void Awake()
+    {
+        Clear();
+        nameField.onValueChanged.AddListener((value) =>
+        {
+            characterLimit.text = $"{value.Length}/{nameField.characterLimit}";
+        });
+    }
+
     public void CreateRoom()
     {
         if(!ClientAPI.IsLogged) return;
@@ -25,5 +36,16 @@ public class CreateRoomPanel : MonoBehaviour
         if(isError) return;
         RoomsMgr.Instance.CreateRoom(name);
     }
-    
+
+    private void Clear()
+    {
+        nameField.text = "";
+        nameError.text = "";
+        characterLimit.text = $"0/{nameField.characterLimit}";
+    }
+
+    private void OnDisable()
+    {
+        Clear();
+    }
 }

@@ -156,6 +156,7 @@ public class PlayerData
 {
     public string sessionId;
     public User user;
+    public string currentRoomId;
 
     public PlayerData(string sessionId, User user)
     {
