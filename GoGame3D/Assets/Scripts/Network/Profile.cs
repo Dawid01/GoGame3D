@@ -14,33 +14,48 @@ public class Profile : MonoBehaviour
    [SerializeField] private Button logoutButton;
    private Sprite _userDefaultSprite;
    [SerializeField] private CanvasGroup canvasGroup;
+   [SerializeField] private bool mainProfile = false;
 
    private void Awake()
    {
       _userDefaultSprite = avatar.sprite;
-      logoutButton.onClick.AddListener(() =>
+      if (mainProfile)
       {
-         if (GameMgr.Instance.hasGameStarted)
+         logoutButton.onClick.AddListener(() =>
          {
-            GameMgr.Instance.InitializeGame(true);
-            GameMgr.Instance.hasGameStarted = false;
-         }
+            if (GameMgr.Instance.hasGameStarted)
+            {
+               GameMgr.Instance.InitializeGame(true);
+               GameMgr.Instance.hasGameStarted = false;
+            }
 
-         //ClientAPI.Logout();
-         //NetworkMgr.Instance.websocket.Close();
-         NetworkMgr.Instance.Logout();
+            NetworkMgr.Instance.Logout();
+            avatar.sprite = _userDefaultSprite;
+            nicknameText.text = "";
+            canvasGroup.alpha = 0.25f;
+            logoutButton.gameObject.SetActive(false);
+            gameObject.SetActive(false);
+         });
+      }
+      else
+      {
          avatar.sprite = _userDefaultSprite;
          nicknameText.text = "";
-         //UIMgr.Instance.ActiveElement("LoginPanel");
-         canvasGroup.alpha = 0.25f;
+         canvasGroup.alpha = 1f;
          logoutButton.gameObject.SetActive(false);
-         gameObject.SetActive(false);
-      });
+      }
+   }
+
+   public void Initialize(PlayerData playerData)
+   {
+      if(!mainProfile) return;
+      nicknameText.text = playerData.user.nickname;
+
    }
 
    private void OnEnable()
    {
-      if(!ClientAPI.IsLogged) return;
+      if(!ClientAPI.IsLogged && mainProfile) return;
       nicknameText.text = ClientAPI.LoggedUser.nickname;
       // _ = ClientAPI.LoadImageAsync($"{BaseAvatarURL}{ClientAPI.LoggedUser.nickname}&bold=true", avatar);
    }

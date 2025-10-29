@@ -11,7 +11,11 @@ public class NetworkMgr : Singleton<NetworkMgr>
 
     public PlayerData currentPlayer;
     public Room currentRoom;
-    
+
+    public static Action<PlayerData> onPlayerJoin;
+    public static Action<PlayerData> onPlayerLeave;
+
+
     async public void Connect()
     {
         
@@ -95,40 +99,29 @@ public class NetworkMgr : Singleton<NetworkMgr>
         switch (baseMsg.type)
         {
             case "ASSIGN_ID":
-                var msg = JsonUtility.FromJson<GameMessageBase>(json);
-                currentPlayer = new PlayerData(msg.sessionId, ClientAPI.LoggedUser);
-                //InitializePlayer();
+                var assignIdMsg = JsonUtility.FromJson<GameMessageBase>(json);
+                currentPlayer = new PlayerData(assignIdMsg.sessionId, ClientAPI.LoggedUser);
+                break;
+            case "JOIN_ROOM":
+                var joinRoomMsg = JsonUtility.FromJson<GameMessage<PlayerData>>(json);
+                onPlayerJoin?.Invoke(joinRoomMsg.data);
+                break;
+            case "LEAVE_ROOM":
+                var leaveRoomMsg = JsonUtility.FromJson<GameMessage<PlayerData>>(json);
+                onPlayerLeave?.Invoke(leaveRoomMsg.data);
                 break;
             default:
                 break;
         }
         
     }
-
-
-    // private void InitializePlayer()
-    // {
-    //     // GameMessage<PlayerData> msg = new GameMessage<PlayerData>();
-    //     // msg.type = "PLAYER_INIT";
-    //     // msg.sessionId = currentPlayer.sessionId;
-    //     // msg.data = currentPlayer;
-    //     GameMessage<User> msg = new GameMessage<User>();
-    //     msg.type = "PLAYER_INIT";
-    //     msg.sessionId = currentPlayer.sessionId;
-    //     msg.data = currentPlayer.user;
-    //     SendWebSocketMessage(msg);
-    // }
-
-    public void CreateRoom()
-    {
-        
-    }
-
+    
     public void Logout()
     {
         ClientAPI.Logout();
         Websocket.Close();
         currentPlayer = null;
+        currentRoom = null;
         UIMgr.Instance.ActiveElement("LoginPanel");
     }
 }
