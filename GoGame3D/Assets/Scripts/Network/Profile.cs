@@ -48,16 +48,22 @@ public class Profile : MonoBehaviour
 
    public void Initialize(PlayerData playerData)
    {
-      if(!mainProfile) return;
+     // if(mainProfile) return;
       nicknameText.text = playerData.user.nickname;
 
    }
 
    private void OnEnable()
    {
-      if(!ClientAPI.IsLogged && mainProfile) return;
+      if(!ClientAPI.IsLogged || !mainProfile) return;
       nicknameText.text = ClientAPI.LoggedUser.nickname;
       // _ = ClientAPI.LoadImageAsync($"{BaseAvatarURL}{ClientAPI.LoggedUser.nickname}&bold=true", avatar);
    }
-    
+
+   public void Clear()
+   {
+      avatar.sprite = _userDefaultSprite;
+      nicknameText.text = "";
+   }
+
 }

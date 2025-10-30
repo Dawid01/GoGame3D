@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using NativeWebSocket;
+using Unity.Collections;
 using UnityEngine;
 
 public class NetworkMgr : Singleton<NetworkMgr>
@@ -12,8 +13,8 @@ public class NetworkMgr : Singleton<NetworkMgr>
     public PlayerData currentPlayer;
     public Room currentRoom;
 
-    public static Action<PlayerData> onPlayerJoin;
-    public static Action<PlayerData> onPlayerLeave;
+    public static Action<PlayerData> OnPlayerJoin;
+    public static Action<PlayerData> OnPlayerLeave;
 
 
     async public void Connect()
@@ -104,11 +105,12 @@ public class NetworkMgr : Singleton<NetworkMgr>
                 break;
             case "JOIN_ROOM":
                 var joinRoomMsg = JsonUtility.FromJson<GameMessage<PlayerData>>(json);
-                onPlayerJoin?.Invoke(joinRoomMsg.data);
+                Debug.Log("JOIN_ROOM: " + joinRoomMsg.data.user.nickname);
+                OnPlayerJoin?.Invoke(joinRoomMsg.data);
                 break;
             case "LEAVE_ROOM":
                 var leaveRoomMsg = JsonUtility.FromJson<GameMessage<PlayerData>>(json);
-                onPlayerLeave?.Invoke(leaveRoomMsg.data);
+                OnPlayerLeave?.Invoke(leaveRoomMsg.data);
                 break;
             default:
                 break;
@@ -147,7 +149,7 @@ public class GameMessage<T> : GameMessageBase
 [Serializable]
 public class PlayerData
 {
-    public string sessionId;
+    [ReadOnly] public string sessionId;
     public User user;
     public string currentRoomId;
 

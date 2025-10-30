@@ -40,6 +40,13 @@ public class UIMgr : Singleton<UIMgr>
         mobileUI.SetActive(isMobile);
         ActiveElement("LoginPanel");
         IsLoggedInitialize();
+        for (int i = 0; i < _elements.Length; i++)
+        {
+            if(TryGetComponent<IPanel>(out IPanel panel))
+            {
+                panel.SubscribeEvents();
+            }
+        }
 
     }
     
